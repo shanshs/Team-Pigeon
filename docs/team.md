@@ -9,8 +9,8 @@ title:  Team
 ## Shanshan Shi
 ***UCI Net ID***: shanshs
 
-## USER 2
-***UCI Net ID***: ucinetid2
+## Jonathan Nguyen
+***UCI Net ID***: jdnguye6
 
 ## Kyle Strong
 ***UCI Net ID***: kjstrong
