@@ -12,5 +12,8 @@ Our agent will be attempting to complete a “Dropper” map. The agent will spa
 ## Evaluation Plan
 A successful AI will be able to safely land in a pool of water from a high location while taking minimum damage. Our metrics will be the survival of our agent, how close our agent is to the goal (height-wise) and the total amount of health lost. Ideally the agent should be able to reach the pool of water without taking any damage, and will be punished for hitting an obstacle even if it survives.
 
+The first sanity check is to make sure our agent can recognize obstacles and react to the environment. Our moonshot/goal would be to reach the bottom without taking any damage. 
+We can calculate how well we're doing by tracking how much hp is lost, or by how far down the dropper the agent lives before it dies.
+
 ## Appointment with the Instructor
 Time: 9:45 am - Wednesday, October 21, 2020
