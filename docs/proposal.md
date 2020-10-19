@@ -13,3 +13,4 @@ title:  Team
 
 
 ## Appointment with the Instructor
+Time: 9:45 pm - Wednesday, October 21, 2020
