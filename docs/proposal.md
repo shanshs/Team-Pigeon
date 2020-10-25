@@ -4,7 +4,7 @@ title:  Team
 ---
 
 ## Summary of the Project
-Our agent will be attempting to complete a “Dropper” map. The agent will spawn at a high location and begin falling. Its goal will be to reach a location at the bottom in which it will land in a pool of water safely. The agent will need to avoid various obstacles in the air in order to avoid dying from fall damage so it can make its way to the bottom. It will do so by strafing in the air by moving in different directions. The agent will receive info on its immediate surroundings and its distance from the goal and then output a direction to move in.
+Our agent will be attempting to complete a “Dropper” map. The agent will spawn at a high location and begin falling. Its goal will be to reach a location at the bottom in which it will land in a pool of water safely. Our agent will move continuously in a direction for a short amount of time. The agent will need to avoid various obstacles in the air in order to avoid dying from fall damage so it can make its way to the bottom. It will do so by strafing in the air by moving in different directions. The agent will receive info on its immediate surroundings and its distance from the goal and then output a direction to move in. Each input will be an 100*100 pixel image, which is 80,000 bits.
 
 ## AI/ML Algorithms
 We anticipate using reinforcement learning/Deep Q learning to figure out the best movements our agent should take.
