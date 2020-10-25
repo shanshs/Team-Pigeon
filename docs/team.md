@@ -14,3 +14,6 @@ title:  Team
 
 ## Kyle Strong
 ***UCI Net ID***: kjstrong
+
+## Weekly Meeting Time
+Wed 7pm
