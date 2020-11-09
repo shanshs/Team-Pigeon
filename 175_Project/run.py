@@ -1,8 +1,3 @@
-try:
-    from malmo import MalmoPython
-except:
-    import MalmoPython
-
 import os
 import sys
 import time
@@ -18,12 +13,17 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
+try:
+    from malmo import MalmoPython
+except:
+    import MalmoPython
+    
 
 # Hyperparameters
 SIZE =50
 REWARD_DENSITY = .1
 PENALTY_DENSITY = .02
-OBS_SIZE = 5
+OBS_SIZE = 3
 MAX_EPISODE_STEPS = 100
 MAX_GLOBAL_STEPS = 10000
 REPLAY_BUFFER_SIZE = 10000
@@ -37,9 +37,9 @@ START_TRAINING = 500
 LEARN_FREQUENCY = 1
 ACTION_DICT = {
     0: 'move 1',  # Move one block forward
-    1: 'turn 1',  # Turn 90 degrees to the right
-    2: 'turn -1',  # Turn 90 degrees to the left
-    3: 'attack 1'  # Destroy block
+    1: 'move 1',  # Turn 90 degrees to the right
+    2: 'move 1',  # Turn 90 degrees to the left
+    3: 'move 1'  # Destroy block
 }
 
 
@@ -51,7 +51,8 @@ class QNetwork(nn.Module):
     #
     #-------------------------------------
 
-    def __init__(self, obs_size, action_size, hidden_size=100):
+    def __init__(self, obs_size, action_size, hidden_size=90):
+        print(obs_size)
         super().__init__()
         self.net = nn.Sequential(nn.Linear(np.prod(obs_size), hidden_size),
                                  nn.Tanh(),
@@ -97,7 +98,7 @@ def genMap():
             for elemY in range(250):
                 if not (elemX == 1 and elemZ == 1 or elemX == 1 and elemZ ==2 or elemX == 2 and elemZ ==1 or elemX == 2 and elemZ==2): # Removes 2x2 blocks
                     a = genString(elemX, elemY, elemZ, blocktype)
-                    print(a)
+                    #print(a)
                     mapStr += a
     
     w = genString(1,2,1, 'water')
@@ -116,6 +117,11 @@ def genMap():
     mapStr += w       
     return mapStr
 
+def gen_air():
+    s = ''
+    for y in range(250):
+        s += "<DrawBlock x='0'  y='"+ str(y) +"' z='0' type='air' />"
+    return s
 
 
 def GetMissionXML():
@@ -148,7 +154,7 @@ def GetMissionXML():
                     <ServerHandlers>
                         <FlatWorldGenerator generatorString="3;1*minecraft:grass;1;"/>
                         <DrawingDecorator>''' + \
-                            genMap()+\
+                            genMap()+ gen_air() +\
                             '''
                         </DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
@@ -167,17 +173,17 @@ def GetMissionXML():
                         <DiscreteMovementCommands/>
                         <ObservationFromFullStats/>
                         <RewardForCollectingItem>
-							<Item reward = "1" type = "diamond"/>
+							<Item reward = "1" type = "water"/>
                         </RewardForCollectingItem>
                         
                         <RewardForTouchingBlockType>
-							<Block type = "lava" reward = '-1'/>
+							<Block type = "obsidian" reward = '-1'/>
                         </RewardForTouchingBlockType>
                         
                         <ObservationFromGrid>
                             <Grid name="floorAll">
-                                <min x="-'''+str(int(OBS_SIZE/2))+'''" y="-1" z="-'''+str(int(OBS_SIZE/2))+'''"/>
-                                <max x="'''+str(int(OBS_SIZE/2))+'''" y="0" z="'''+str(int(OBS_SIZE/2))+'''"/>
+                                <min x="-1" y="-9" z="-1"/>
+                                <max x="1" y="0" z="1"/>
                             </Grid>
                         </ObservationFromGrid>
                         <AgentQuitFromReachingCommandQuota total="'''+str(MAX_EPISODE_STEPS)+'''" />
@@ -187,7 +193,18 @@ def GetMissionXML():
 
 
 def get_action(obs, q_network, epsilon, allow_break_action):
-    pass
+    with torch.no_grad():
+        # Calculate Q-values fot each action
+        obs_torch = torch.tensor(obs.copy(), dtype=torch.float).unsqueeze(0)
+        action_values = q_network(obs_torch)
+        
+        p = np.random.random() 
+        if p < epsilon: 
+                action_idx = random.randint(0, 3)
+        else:
+            action_idx = torch.argmax(action_values).item()
+    print(action_idx)
+    return action_idx
 
 
 def init_malmo(agent_host):
@@ -218,7 +235,47 @@ def init_malmo(agent_host):
 
 
 def get_observation(world_state):
-    pass
+    """
+    Use the agent observation API to get a 2 x 5 x 5 grid around the agent. 
+    The agent is in the center square facing up.
+
+    Args
+        world_state: <object> current agent world state
+
+    Returns
+        observation: <np.array>
+    """
+    obs = np.zeros((10, OBS_SIZE, OBS_SIZE))
+
+    while world_state.is_mission_running:
+        time.sleep(0.1)
+        world_state = agent_host.getWorldState()
+        if len(world_state.errors) > 0:
+            raise AssertionError('Could not load grid.')
+
+        if world_state.number_of_observations_since_last_state > 0:
+            # First we get the json from the observation API
+            msg = world_state.observations[-1].text
+            observations = json.loads(msg)
+
+            # Get observation
+            #print(observations)
+            grid = observations['floorAll']
+            grid_binary = [1 if x == 'obsidian' or x == 'water' else 0 for x in grid]
+            obs = np.reshape(grid_binary, (10, OBS_SIZE, OBS_SIZE))
+
+            # Rotate observation with orientation of agent
+            yaw = observations['Yaw']
+            if yaw == 270:
+                obs = np.rot90(obs, k=1, axes=(1, 2))
+            elif yaw == 0:
+                obs = np.rot90(obs, k=2, axes=(1, 2))
+            elif yaw == 90:
+                obs = np.rot90(obs, k=3, axes=(1, 2))
+            
+            break
+    #print(obs)
+    return obs
 
 
 def prepare_batch(replay_buffer):
@@ -298,8 +355,8 @@ def train(agent_host):
         agent_host (MalmoPython.AgentHost)
     """
     # Init networks
-    q_network = QNetwork((2, OBS_SIZE, OBS_SIZE), len(ACTION_DICT))
-    target_network = QNetwork((2, OBS_SIZE, OBS_SIZE), len(ACTION_DICT))
+    q_network = QNetwork((10, OBS_SIZE, OBS_SIZE), len(ACTION_DICT))
+    target_network = QNetwork((10, OBS_SIZE, OBS_SIZE), len(ACTION_DICT))
     target_network.load_state_dict(q_network.state_dict())
 
     # Init optimizer
@@ -342,7 +399,9 @@ def train(agent_host):
             command = ACTION_DICT[action_idx]
 
             # Take step
+            print('a', command)
             agent_host.sendCommand(command)
+            print('b')
 
             # If your agent isn't registering reward you may need to increase this
             time.sleep(.1)
