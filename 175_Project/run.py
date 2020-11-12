@@ -22,9 +22,10 @@ except:
 # Hyperparameters
 SIZE =50
 REWARD_DENSITY = .1
+OBSTACLE_DENSITY = 0.03
 PENALTY_DENSITY = .02
 OBS_SIZE = 3
-MAX_EPISODE_STEPS = 100
+MAX_EPISODE_STEPS = 100  #we need to increase this number when map gets larger
 MAX_GLOBAL_STEPS = 10000
 REPLAY_BUFFER_SIZE = 10000
 EPSILON_DECAY = .999
@@ -37,9 +38,9 @@ START_TRAINING = 500
 LEARN_FREQUENCY = 1
 ACTION_DICT = {
     0: 'move 1',  # Move one block forward
-    1: 'move 1',  # Turn 90 degrees to the right
-    2: 'move 1',  # Turn 90 degrees to the left
-    3: 'move 1'  # Destroy block
+    1: 'move -1',  # Move one block forward
+    2: 'turn 1',  # Turn 90 degrees to the right
+    3: 'turn -1'  # Turn 90 degrees to the left
 }
 
 
@@ -52,7 +53,6 @@ class QNetwork(nn.Module):
     #-------------------------------------
 
     def __init__(self, obs_size, action_size, hidden_size=90):
-        print(obs_size)
         super().__init__()
         self.net = nn.Sequential(nn.Linear(np.prod(obs_size), hidden_size),
                                  nn.Tanh(),
@@ -78,6 +78,7 @@ def genString(x,y,z, blocktype):
     """
     return '<DrawBlock x="' + str(x) + '" y="' + str(y) + '" z="' + str(z) + '" type="' + blocktype + '"/>'
 
+
 def genMap():
     """
     Generates string of map for the XML
@@ -92,55 +93,52 @@ def genMap():
     mapStr = ""
     
     
-    blocktype = 'wool'
-    for elemX in range(4):
-        for elemZ in range(4):
+    blocktype = 'wool' 
+    for elemX in range(5):
+        for elemZ in range(5):
             for elemY in range(250):
-                if not (elemX == 1 and elemZ == 1 or elemX == 1 and elemZ ==2 or elemX == 2 and elemZ ==1 or elemX == 2 and elemZ==2): # Removes 2x2 blocks
+                if not (elemX == 1 and elemZ == 1 or elemX == 1 and elemZ ==2 or elemX == 1 and elemZ ==3 or elemX == 2 and elemZ ==1 or elemX == 2 and elemZ==2 or elemX == 2 and elemZ==3 or elemX == 3 and elemZ==1 or elemX == 3 and elemZ==2 or elemX == 3 and elemZ==3): # Removes 2x2 blocks
                     a = genString(elemX, elemY, elemZ, blocktype)
                     #print(a)
                     mapStr += a
-    
+                    
+                    
     w = genString(1,2,1, 'water')
     mapStr += w
     w = genString(2,2,1, 'water')
     mapStr += w
-    w = genString(1,2,2, 'wool')
+    
+    w = genString(1,2,2, 'glass')
     mapStr += w
-    w = genString(2,2,2, 'wool')
+    w = genString(2,2,2, 'glass')
     mapStr += w    
     
-    w = genString(2,100,2, 'obsidian')
-    mapStr += w    
+    for X in range(1,4):
+        for Z in range(1,4):
+            w = genString(X,1,Z, 'wool')
+            mapStr += w
     
-    w = genString(2,100,1, 'obsidian')
-    mapStr += w       
+    
+    for X in range(1,4):
+        for Z in range(1,4):
+            for Y in range(5, 250, 3):
+                p = np.random.random() 
+                if p <= OBSTACLE_DENSITY:
+                    w = genString(X,Y,Z, 'glass')
+                    mapStr += w
+          
     return mapStr
-
-def gen_air():
-    s = ''
-    for y in range(250):
-        s += "<DrawBlock x='0'  y='"+ str(y) +"' z='0' type='air' />"
-    return s
 
 
 def GetMissionXML():
-    #------------------------------------
-    #
-    #   TODO: Spawn diamonds
-    #   TODO: Spawn lava
-    #   TODO: Add diamond reward
-    #   TODO: Add lava negative reward
-    #
-    #-------------------------------------
-    my_xml = """""<DrawBlock x='3' y='2' z='3' type = 'diamond_ore' />"" ""<DrawBlock x='5' y='2' z='3' type = 'diamond_ore' />""" ""
+    my_xml = """""<DrawBlock x='3' y='2' z='3' type = 'diamond_ore' />"" ""<DrawBlock x='5' y='2' z='3' type = 'diamond_ore' />"""""
 
     
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
                 <About>
-                    <Summary>Diamond Collector</Summary>
+                    <Summary>The Dropper</Summary>
                 </About>
 
                 <ServerSection>
@@ -154,7 +152,8 @@ def GetMissionXML():
                     <ServerHandlers>
                         <FlatWorldGenerator generatorString="3;1*minecraft:grass;1;"/>
                         <DrawingDecorator>''' + \
-                            genMap()+ gen_air() +\
+                              "<DrawCuboid x1='-6' x2='6' y1='-1' y2='250' z1='-6' z2='6' type='air'/>" +\
+                            genMap()+\
                             '''
                         </DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
@@ -162,9 +161,9 @@ def GetMissionXML():
                 </ServerSection>
 
                 <AgentSection mode="Survival">
-                    <Name>CS175DiamondCollector</Name>
+                    <Name>CS175TheDropper</Name>
                     <AgentStart>
-                        <Placement x="2" y="270" z="2" pitch="90" yaw="0"/>
+                        <Placement x="2.5" y="250" z="2.5" pitch="90" yaw="0"/>
                         <Inventory>
                             <InventoryItem slot="0" type="diamond_pickaxe"/>
                         </Inventory>
@@ -172,12 +171,8 @@ def GetMissionXML():
                     <AgentHandlers>
                         <DiscreteMovementCommands/>
                         <ObservationFromFullStats/>
-                        <RewardForCollectingItem>
-							<Item reward = "1" type = "water"/>
-                        </RewardForCollectingItem>
-                        
                         <RewardForTouchingBlockType>
-							<Block type = "obsidian" reward = '-1'/>
+							<Block type = "glass" reward = '-1'/>
                         </RewardForTouchingBlockType>
                         
                         <ObservationFromGrid>
@@ -192,7 +187,7 @@ def GetMissionXML():
             </Mission>'''
 
 
-def get_action(obs, q_network, epsilon, allow_break_action):
+def get_action(obs, q_network, epsilon):
     with torch.no_grad():
         # Calculate Q-values fot each action
         obs_torch = torch.tensor(obs.copy(), dtype=torch.float).unsqueeze(0)
@@ -203,7 +198,6 @@ def get_action(obs, q_network, epsilon, allow_break_action):
                 action_idx = random.randint(0, 3)
         else:
             action_idx = torch.argmax(action_values).item()
-    print(action_idx)
     return action_idx
 
 
@@ -222,7 +216,7 @@ def init_malmo(agent_host):
 
     for retry in range(max_retries):
         try:
-            agent_host.startMission( my_mission, my_clients, my_mission_record, 0, "DiamondCollector" )
+            agent_host.startMission( my_mission, my_clients, my_mission_record, 0, "The Dropper" )
             break
         except RuntimeError as e:
             if retry == max_retries - 1:
@@ -261,7 +255,7 @@ def get_observation(world_state):
             # Get observation
             #print(observations)
             grid = observations['floorAll']
-            grid_binary = [1 if x == 'obsidian' or x == 'water' else 0 for x in grid]
+            grid_binary = [1 if x == 'glass' or x == 'water' else 0 for x in grid]
             obs = np.reshape(grid_binary, (10, OBS_SIZE, OBS_SIZE))
 
             # Rotate observation with orientation of agent
@@ -337,7 +331,7 @@ def log_returns(steps, returns):
     returns_smooth = np.convolve(returns, box, mode='same')
     plt.clf()
     plt.plot(steps, returns_smooth)
-    plt.title('Diamond Collector')
+    plt.title('The Dropper')
     plt.ylabel('Return')
     plt.xlabel('Steps')
     plt.savefig('returns.png')
@@ -394,14 +388,11 @@ def train(agent_host):
         # Run episode
         while world_state.is_mission_running:
             # Get action
-            allow_break_action = obs[1, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 1
-            action_idx = get_action(obs, q_network, epsilon, allow_break_action)
+            action_idx = get_action(obs, q_network, epsilon)
             command = ACTION_DICT[action_idx]
 
             # Take step
-            print('a', command)
             agent_host.sendCommand(command)
-            print('b')
 
             # If your agent isn't registering reward you may need to increase this
             time.sleep(.1)
@@ -409,6 +400,7 @@ def train(agent_host):
             # We have to manually calculate terminal state to give malmo time to register the end of the mission
             # If you see "commands connection is not open. Is the mission running?" you may need to increase this
             episode_step += 1
+            print(episode_step)
             if episode_step >= MAX_EPISODE_STEPS or \
                     (obs[0, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 1 and \
                     obs[1, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 0 and \
