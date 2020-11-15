@@ -2,39 +2,14 @@
 layout: default
 title:  Home
 ---
+<div style="text-align:center"><img src="Falling.png" width="450" height="290"/></div>
 
-Source code: https://github.com/USER/PROJECT (_fix this_)
-
-Reports:
+## Welcome to THE DROPPER!
+Our project simulates a “Dropper” map. The agent spawns at a high location and begins falling. Its goal is to reach a location at the bottom in which it will land in a pool of water safely. The agent will need to avoid various obstacles in the air in order to avoid dying from fall damage so it can make its way to the bottom. It will do so by strafing in the air by moving in different directions. 
 
 - [Proposal](proposal.html)
 - [Status](status.html)
 - [Final](final.html)
 
-What's Markdown (`.md`)?
 
-Markdown is markup that lets you write hypertext (HTML) documents
-in easy-to-read and easy-to-write plain text.
-No angle brackets `<></>` required for
-paragraphs, lists, blockquotes, tables, etc.
-
-
-This is a paragraph (in Markdown). Some more
-text here.
-
-This is another paragraph.
-
-This is a list:
-
-- Orange
-- Apple
-- Blueberry
-
-$$x^2 = y^2$$
-
-
-Just getting started with Markdown?
-See the [HTML <-> Markdown Quick Reference (Cheat Sheet)][quickref].
-
-
-[quickref]: https://github.com/mundimark/quickrefs/blob/master/HTML.md
+Source code: https://github.com/shanshs/Team-Pigeon
