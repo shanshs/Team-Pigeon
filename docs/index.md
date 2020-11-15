@@ -13,4 +13,4 @@ Our project simulates a “Dropper” map. The agent spawns at a high location a
 - [Final](final.html)
 
 
-Source code: https://github.com/shanshs/Team-Pigeon
+Source code: [https://github.com/shanshs/Team-Pigeon](https://github.com/shanshs/Team-Pigeon)
