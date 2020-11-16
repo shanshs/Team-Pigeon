@@ -21,3 +21,10 @@ We still need to find out the way of rewarding the agent. For now, we have three
 Moreover, we are planning to make our map more complex. currently, we only have a verticle tunnel. We may add a horizontal tunnel for the final project.
 
 ## Resources Used
+Python Malmo libraries and documentation: 
+https://github.com/microsoft/malmo
+http://microsoft.github.io/malmo/0.30.0/Documentation/
+
+PyTorch library
+
+CS175 Assignment 2
