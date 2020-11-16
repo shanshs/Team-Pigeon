@@ -11,8 +11,22 @@ The agent will spawn at the top of the tunnel and begin falling from it. The goa
 
 ## Approach
 We are using primarily Reinforcement Learning for our approach for the project.
-	
-Currently, our agent moves only in discrete actions.
+
+
+We use DQN learning to train our agent:
+
+```
+For each episode:
+   While the agent hasn't reached the pool or die:
+      Choose an action by applying epsilon greedy policy from Q network
+      Take the action
+      Get the next observation by check the 3*3*10 grid around the agent
+      Calculate the reward
+      Update Q network
+```
+
+We create a function called genMap() to generate the XML for the tunnel. We also use a bool variable called fixed to decide whether to apply randomness for the location of the obstacles. To keep the simplicity, our agent always face to the north and moves only in discrete actions (never turn).
+
 * Move right
 * Move left
 * Move forward
