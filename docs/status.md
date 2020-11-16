@@ -56,10 +56,11 @@ Since our map is a vertical tunnel and the agent drops from the top of tunnel, t
 ```
 
 To get the action of each step, we apply the following function from lecture:
+
 $$
 \pi(a|s)=\left\{
 	\begin{aligned}
-	\epsilon/m+1- \epsilon [\text{ if a*} = \argmax_{(a \in A)} Q(s,a)]\\
+	\epsilon/m+1- \epsilon \text{ }[\text{ if a*} = argmax_{(a \in A)} Q(s,a)]\\
 	\epsilon/m  \text{  otherwise}\\
 	\end{aligned}
 	\right.
