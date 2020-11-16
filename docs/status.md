@@ -51,7 +51,32 @@ Since our map is a vertical tunnel and the agent drops from the top of tunnel, t
  grid_binary = [1 if x == 'obsidian' or x == 'water' else 0 for x in grid]
  obs = np.reshape(grid_binary, (10, OBS_SIZE, OBS_SIZE)
 ```
+
+To get the action of each step, we apply the following function from lecture:
+<div style="text-align:center"><img src="egreedy.png" width="450" height="120"/></div>
  
+We create an array called action_prob to save the probabilities for each action. Then, we calculate action_prob base on the formular above and use np.random.choice chooses an action based on the probabilities in action_prob array.
+
+
+```
+ def get_action(obs, q_network, epsilon):
+    with torch.no_grad():
+        # Calculate Q-values for each action
+        obs_torch = torch.tensor(obs.copy(), dtype=torch.float).unsqueeze(0)
+        action_values = q_network(obs_torch)
+
+        action_prob = [epsilon/4.0, epsilon/4.0, epsilon/4.0, epsilon/4.0]
+        actions = [0, 1, 2, 3]
+
+        # Select action with highest Q-value
+        action_idx = torch.argmax(action_values).item()
+
+        action_prob[action_idx] += (1-epsilon)
+        action_i = np.random.choice(actions, p=action_prob)
+        
+    return action_i
+```
+
 ## Evaluation
 	Insert graphs and stuff here
 	
