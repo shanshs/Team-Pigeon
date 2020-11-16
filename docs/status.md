@@ -80,18 +80,25 @@ We create an array called action_prob to save the probabilities for each action.
 
 ## Evaluation
 
+Our agent's actions are currently being rewarded with the following:
 **Reward Function**
 $$
 R(s)=\left\{
 	\begin{aligned}
 	100 &\ (\text{Agent reaches water safely})\\
 	1 &\ (\text{+1 For every millisecond the agent is alive})\\
-	-25 &\ (\text{Damage from obstacle, without dying})\\
+	-25 &\ (\text{Hitting an obstacle})\\
 	\end{aligned}
 	\right.
 $$
-	Insert graphs and stuff here
-	
+The agent is greatly rewarded with 100 points for completeing the objective and reaching the water safely and is punished for hitting obstacles receiving -25 points. However, we wanted to ensure that the agent wouldn't spend time randomly moving until it luckily lands in the water or hits an obstacle so we added another reward for staying alive as long as possible in order to encourage the agent to dodge obstacles and get lower in the tunnel. Thus we gave the agent 1 point for every millisecond it remained alive.
+
+By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters.
+
+<div style="text-align:center"><img src="returns_PPO.png" width="450" height="290"/></div>
+
+As seen in the graph above, the returns fluctuate quite a bit. This is in part due to the nature of the Dropper. As the agent falls and gets closer to the ground it keeps on gaining points eventually receiving a lot for reaching the water, but should a random action taken due to the e-greedy policy result in its death, the agent loses out on a lot of points and thus has a much lower return value resulting in the many peaks and valleys. Despite this, the graph still shows an overall upward trend, meaning that as time goes on and the number of episodes increases, the agent tends to get farther down and lands in the water much more often.
+
 ## Remaining Goals and Challenges
 - **Randomness**
  
@@ -99,7 +106,7 @@ $$
 
 - **Reward and Penalty**
 
-  We still need to find the best way to reward or punish the agent so that it learns most optimally. For now, we have three plans: +1 reward for staying alive in the tunnel, +100 reward for landing in the pool and -100 reward  for dying, -1 reward for touching obsidian obstacles. For the future, we need to find out the most reasonable reward for the agents’s performance.
+  We still need to find the best way to reward or punish the agent so that it learns most optimally. Currently we are using the above rewards for our agent but we have tested and will continue testing different rewards in order to more effectively train our agent. Our rewards also might need to change in response to how our Dropper maps are set up. For example, in a very complex Dropper map with lots of obstacles it might be necessary for our agent to land on an obstacle and walk in a certain direction in order to progress. In this case, harshly punishing the agent for touching an obstacle wouldn't be optimal. Instead we might want to only have a small punishment for touching an obstacle but having a very large punishment if touching the obstacle results in death. 
 
 - **Map Complexity**
 
