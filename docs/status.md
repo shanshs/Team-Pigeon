@@ -57,6 +57,15 @@ Since our map is a vertical tunnel and the agent drops from the top of tunnel, t
 
 To get the action of each step, we apply the following function from lecture:
 <div style="text-align:center"><img src="egreedy.png" width="450" height="120"/></div>
+
+$$
+\pi(a|s)=\left\{
+	\begin{aligned}
+	\epsilon/m+1- \epsilon [if a* = argmax_(a in A) Q(s,a)]\\
+	1 &\ (\text{Time Agent stays alive (in milliseconds)})\\
+	\end{aligned}
+	\right.
+$$
  
 We create an array called action_prob to save the probabilities for each action. Then, we calculate action_prob base on the formular above and use np.random.choice chooses an action based on the probabilities in action_prob array.
 
