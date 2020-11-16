@@ -5,12 +5,12 @@ title:  Status
 
 ## Project Summary
 
-Our project simulates a “Dropper” map, which is a 5 block wide and 250 block high tunnel made of wool. Inside the tunnel, there are some obsidian obstacles at different locations. At the bottom of the tunnel, there is a pool of water. 
+Our project attempts to have an agent complete a “Dropper” map, which is a map in which a player attempts to fall safely to the bottom while avoiding obstacles. Our agent will be completing a map in which thee is a 5 block wide and 250 block high tunnel made of wool. Inside the tunnel, there are some obsidian obstacles at different locations. At the bottom of the tunnel, there is a pool of water. 
 
 The agent will spawn at the top of the tunnel and begin falling from it. The goal of the project is to let the agent reach the bottom of the tunnel and land in the pool of water safely without taking any damage. In this process, the agent will strafe in the air by moving in different directions to avoid all obsidian obstacles inside the tunnel in order to avoid dying from fall damage and make its way to the bottom. 
 
 ## Approach
-We are using primarily Reinforcement Learning for our approach for the project.
+We are primarily using Reinforcement Learning for our approach for the project.
 
 $$
 Q(S_t, A_t)\leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma\max_a Q(S_{t+1},a)- Q(s_t, A_t)]
@@ -20,7 +20,7 @@ We use DQN learning to train our agent:
 
 ```
 For each episode:
-   While the agent hasn't reached the pool or die:
+   While the agent hasn't reached the pool of water or dies:
       Choose an action by applying epsilon greedy policy from Q network
       Take the action
       Get the next observation by check the 3*3*10 grid around the agent
@@ -28,25 +28,7 @@ For each episode:
       Update Q network
 ```
 
-We create a function called genMap() to generate the XML for the tunnel. We also use a bool variable called fixed to decide whether to apply randomness for the location of the obstacles. To keep the simplicity, our agent always face to the north and moves only in discrete actions (never turn).
-
-* Move right
-* Move left
-* Move forward
-* Move backwards
-	
-**Reward Function**
-$$
-R(s)=\left\{
-	\begin{aligned}
-	100 &\ (\text{Agent reaches water safely})\\
-	1 &\ (\text{Time Agent stays alive (in milliseconds)})\\
-	-25 &\ (\text{Damage from obstacle, without dying})\\
-	\end{aligned}
-	\right.
-$$
-
-Since our map is a vertical tunnel and the agent drops from the top of tunnel, the falling speed of the agent is fast. Therefore, we set the y = 10 so that the agent can 'see' 10 levels down.
+Our agent will take a 10 x 3 x 3 grid of the blocks around it as observation. Since our map is a vertical tunnel and the agent drops from the top of the tunnel, the falling speed of the agent is fast. Therefore, we set the grid so that the agent can 'see' 10 levels down in order for it to have enough time to dodge obstacles.
  ```
  OBS_SIZE = 3
  obs = np.zeros((10, OBS_SIZE, OBS_SIZE))
@@ -55,6 +37,14 @@ Since our map is a vertical tunnel and the agent drops from the top of tunnel, t
  obs = np.reshape(grid_binary, (10, OBS_SIZE, OBS_SIZE)
 ```
 
+We create a function called genMap() to generate the tunnel in the XML. We also use a bool variable called fixed to decide whether to apply randomness for the location of the obstacles or to used a predetermined set of obstacles we created. To keep the simplicity, our agent always faces the north and only takes discrete actions consisting of:
+
+* Strafe right
+* Strafe left
+* Move forward
+* Move backwards
+
+Each episode will see the agent taking the above actions until it reaches a terminal state of either successfully landing in the pool of water or dying from hitting an obstacle.
 To get the action of each step, we apply the following function from lecture:
 
 $$
@@ -89,16 +79,27 @@ We create an array called action_prob to save the probabilities for each action.
 ```
 
 ## Evaluation
+
+**Reward Function**
+$$
+R(s)=\left\{
+	\begin{aligned}
+	100 &\ (\text{Agent reaches water safely})\\
+	1 &\ (\text{+1 For every millisecond the agent is alive})\\
+	-25 &\ (\text{Damage from obstacle, without dying})\\
+	\end{aligned}
+	\right.
+$$
 	Insert graphs and stuff here
 	
 ## Remaining Goals and Challenges
 - **Randomness**
  
-  Right now, the obsidian obstacles inside the tunnel is hardcoded. The locations of the obstacles stay the same for each episode. In the future, we may generate random location of the obstacles for each episode.
+  Right now, the obsidian obstacles inside the tunnel is hardcoded. The locations of the obstacles stay the same for each episode. In the future, we may try to run our agent on randomly generated obstacles for each episode.
 
 - **Reward and Penalty**
 
-  We still need to find out the way of rewarding the agent. For now, we have three plans: +1 reward for staying alive in the tunnel, +100 reward for landing in the pool and -100 reward  for dying, -1 reward for touching obsidian obstacles. For the future, we need to find out the most reasonable reward for the agents’s performance.
+  We still need to find the best way to reward or punish the agent so that it learns most optimally. For now, we have three plans: +1 reward for staying alive in the tunnel, +100 reward for landing in the pool and -100 reward  for dying, -1 reward for touching obsidian obstacles. For the future, we need to find out the most reasonable reward for the agents’s performance.
 
 - **Map Complexity**
 
