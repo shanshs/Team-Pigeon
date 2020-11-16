@@ -61,8 +61,8 @@ To get the action of each step, we apply the following function from lecture:
 $$
 \pi(a|s)=\left\{
 	\begin{aligned}
-	\epsilon/m+1- \epsilon [if a* = argmax_(a in A) Q(s,a)]\\
-	1 &\ (\text{Time Agent stays alive (in milliseconds)})\\
+	\epsilon/m+1- \epsilon [\text{if a*} = \argmax_(a \in A) Q(s,a)]\\
+	\epsilon/m  \text{  otherwise}\\
 	\end{aligned}
 	\right.
 $$
