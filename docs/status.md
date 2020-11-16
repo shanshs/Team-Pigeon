@@ -15,13 +15,16 @@ The agent will spawn at the top of the tunnel and begin falling from it. The goa
 
 ## Remaining Goals and Challenges
 - **Randomness**
-Right now, the obsidian obstacles inside the tunnel is hardcoded. The locations of the obstacles stay the same for each episode. In the future, we may generate random location of the obstacles for each episode.
+ 
+  Right now, the obsidian obstacles inside the tunnel is hardcoded. The locations of the obstacles stay the same for each episode. In the future, we may generate random location of the obstacles for each episode.
 
 - **Reward and Penalty**
-We still need to find out the way of rewarding the agent. For now, we have three plans: +1 reward for getting one level lower in the tunnel, +100 reward for landing in the pool and -100 reward  for dying, -1 reward for touching obsidian obstacles. For the future, we need to find out the most reasonable reward for the agents’s performance.
+
+  We still need to find out the way of rewarding the agent. For now, we have three plans: +1 reward for getting one level lower in the tunnel, +100 reward for landing in the pool and -100 reward  for dying, -1 reward for touching obsidian obstacles. For the future, we need to find out the most reasonable reward for the agents’s performance.
 
 - **Map Complexity**
-Moreover, we are planning to make our map more complex. currently, we only have a verticle tunnel. We may add a horizontal tunnel for the final project.
+
+  Moreover, we are planning to make our map more complex. currently, we only have a verticle tunnel. We may add a horizontal tunnel for the final project.
 
 ## Resources Used
 Python Malmo libraries and documentation: 
