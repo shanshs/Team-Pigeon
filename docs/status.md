@@ -42,7 +42,16 @@ R(s)=\left\{
 	\end{aligned}
 	\right.
 $$
-	
+
+Since our map is a vertical tunnel and the agent drops from the top of tunnel, the falling speed of the agent is fast. Therefore, we set the y = 10 so that the agent can 'see' 10 levels down.
+ ```
+ OBS_SIZE = 3
+ obs = np.zeros((10, OBS_SIZE, OBS_SIZE))
+ grid = observations['floorAll'] #From the observation API
+ grid_binary = [1 if x == 'obsidian' or x == 'water' else 0 for x in grid]
+ obs = np.reshape(grid_binary, (10, OBS_SIZE, OBS_SIZE)
+```
+ 
 ## Evaluation
 	Insert graphs and stuff here
 	
