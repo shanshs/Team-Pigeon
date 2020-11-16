@@ -12,6 +12,9 @@ The agent will spawn at the top of the tunnel and begin falling from it. The goa
 ## Approach
 We are using primarily Reinforcement Learning for our approach for the project.
 
+$$
+Q(S_t, A_t)\leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma\max_a Q(S_{t+1},a)- Q(s_t, A_t)]
+$$
 
 We use DQN learning to train our agent:
 
