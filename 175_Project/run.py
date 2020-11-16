@@ -17,17 +17,17 @@ try:
     from malmo import MalmoPython
 except:
     import MalmoPython
-    
 
+    
 # Hyperparameters
 SIZE =50
 REWARD_DENSITY = .1
-OBSTACLE_DENSITY = 0.03
 PENALTY_DENSITY = .02
+OBSTACLE_DENSITY = 0.03
 OBS_SIZE = 3
-MAX_EPISODE_STEPS = 100  #we need to increase this number when map gets larger
-MAX_GLOBAL_STEPS = 10000
-REPLAY_BUFFER_SIZE = 10000
+MAX_EPISODE_STEPS = 100
+MAX_GLOBAL_STEPS = 15000
+REPLAY_BUFFER_SIZE = 15000
 EPSILON_DECAY = .999
 MIN_EPSILON = .1
 BATCH_SIZE = 128
@@ -38,9 +38,9 @@ START_TRAINING = 500
 LEARN_FREQUENCY = 1
 ACTION_DICT = {
     0: 'move 1',  # Move one block forward
-    1: 'move -1',  # Move one block forward
-    2: 'turn 1',  # Turn 90 degrees to the right
-    3: 'turn -1'  # Turn 90 degrees to the left
+    1: 'strafe -1',  # Moves left
+    2: 'strafe 1',  # Moves right
+    3: 'move -1'  # Moves back
 }
 
 
@@ -53,11 +53,12 @@ class QNetwork(nn.Module):
     #-------------------------------------
 
     def __init__(self, obs_size, action_size, hidden_size=90):
+        #print(obs_size)
         super().__init__()
         self.net = nn.Sequential(nn.Linear(np.prod(obs_size), hidden_size),
-                                 nn.Tanh(),
+                                 nn.ReLU(),
                                  nn.Linear(hidden_size, action_size)) 
-        
+
     def forward(self, obs):
         """
         Estimate q-values given obs
@@ -82,57 +83,140 @@ def genString(x,y,z, blocktype):
 def genMap():
     """
     Generates string of map for the XML
-    
+
     x x x x
     x     x  
     x     x
     x x x x
-    
+
     250 blocks high
     """
     mapStr = ""
-    
-    
-    blocktype = 'wool' 
+    fixed = True
+
+    blocktype = 'wool'
     for elemX in range(5):
         for elemZ in range(5):
             for elemY in range(250):
-                if not (elemX == 1 and elemZ == 1 or elemX == 1 and elemZ ==2 or elemX == 1 and elemZ ==3 or elemX == 2 and elemZ ==1 or elemX == 2 and elemZ==2 or elemX == 2 and elemZ==3 or elemX == 3 and elemZ==1 or elemX == 3 and elemZ==2 or elemX == 3 and elemZ==3): # Removes 2x2 blocks
+                if not (elemX == 1 and elemZ == 1 or elemX == 1 and elemZ ==2 or elemX == 1 and elemZ ==3 or elemX == 2 and elemZ ==1 or elemX == 2 and elemZ==2 or elemX == 2 and elemZ==3 or elemX == 3 and elemZ==1 or elemX == 3 and elemZ==2 or elemX == 3 and elemZ==3): 
+                    # Removes 3x3 blocks^^^^ This is really ugly lol^^
                     a = genString(elemX, elemY, elemZ, blocktype)
                     #print(a)
                     mapStr += a
-                    
-                    
-    w = genString(1,2,1, 'water')
-    mapStr += w
-    w = genString(2,2,1, 'water')
-    mapStr += w
-    
-    w = genString(1,2,2, 'glass')
-    mapStr += w
-    w = genString(2,2,2, 'glass')
-    mapStr += w    
-    
-    for X in range(1,4):
-        for Z in range(1,4):
-            w = genString(X,1,Z, 'wool')
-            mapStr += w
-    
-    
-    for X in range(1,4):
-        for Z in range(1,4):
-            for Y in range(5, 250, 3):
-                p = np.random.random() 
-                if p <= OBSTACLE_DENSITY:
-                    w = genString(X,Y,Z, 'glass')
-                    mapStr += w
-          
+
+    if fixed:
+        # x o x
+        # o x o
+        # x o x   water = o, obsidian = x, for the first floor
+        w = genString(1,2,2, 'water')
+        mapStr += w
+        w = genString(1,1,2, 'glass')
+        mapStr += w    
+        w = genString(2,2,1, 'water')
+        mapStr += w    
+        w = genString(2,1,1, 'glass')
+        mapStr += w 
+        w = genString(2,2,3, 'water')
+        mapStr += w  
+        w = genString(2,1,3, 'glass')
+        mapStr += w     
+        w = genString(3,2,2, 'water')
+        mapStr += w         
+        w = genString(3,1,2, 'glass')
+        mapStr += w 
+        w = genString(1,2,1, 'obsidian')
+        mapStr += w
+        w = genString(1,2,3, 'obsidian')
+        mapStr += w    
+        w = genString(2,2,2, 'obsidian')
+        mapStr += w    
+        w = genString(3,2,3, 'obsidian')
+        mapStr += w       
+        w = genString(3,2,1, 'obsidian')
+        mapStr += w 
+        
+        # Some random obsidian block obstacles
+        w = genString(2,100,2, 'obsidian')
+        mapStr += w    
+
+        w = genString(2,100,1, 'obsidian')
+        mapStr += w    
+        
+        
+        w = genString(2,150,3, 'obsidian')
+        mapStr += w     
+        
+        w = genString(1,150,3, 'obsidian')
+        mapStr += w    
+        w = genString(3,200,3, 'obsidian')
+        mapStr += w       
+        w = genString(2,60,2, 'obsidian')
+        mapStr += w      
+        w = genString(2,80,2, 'obsidian')
+        mapStr += w         
+        w = genString(1,80,1, 'obsidian')
+        mapStr += w      
+        w = genString(3,80,3, 'obsidian')
+        mapStr += w    
+        w = genString(2,80,3, 'obsidian')
+        mapStr += w    
+
+        mapStr += gen_air()
+
+    if not fixed:
+        w = genString(1,2,1, 'water')
+        mapStr += w
+        w = genString(2,2,1, 'water')
+        mapStr += w
+        
+        w = genString(1,2,2, 'obsidian')
+        mapStr += w
+        w = genString(2,2,2, 'obsidian')
+        mapStr += w    
+        
+        for X in range(1,4):
+            for Z in range(1,4):
+                w = genString(X,1,Z, 'wool')
+                mapStr += w
+        
+        
+        for X in range(1,4):
+            for Z in range(1,4):
+                for Y in range(5, 250, 3):
+                    p = np.random.random() 
+                    if p <= OBSTACLE_DENSITY:
+                        w = genString(X,Y,Z, 'obsidian')
+                        mapStr += w
+                        
     return mapStr
 
+def gen_air():
+    s = ''
+    for y in range(250):
+        s += "<DrawBlock x='0'  y='"+ str(y) +"' z='0' type='air' />"
+    return s
+
+
+def gen_marker_reward():
+    s = ''
+    for y in range(250):
+        s += "<Marker x='1.5' y='" + str(y) +"' z='1.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='1.5' y='" + str(y) +"' z='2.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='1.5' y='" + str(y) +"' z='3.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='2.5' y='" + str(y) +"' z='1.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='2.5' y='" + str(y) +"' z='2.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='2.5' y='" + str(y) +"' z='3.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='3.5' y='" + str(y) +"' z='1.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='3.5' y='" + str(y) +"' z='2.5' reward='1' tolerance='0.5'/>"
+        s += "<Marker x='3.5' y='" + str(y) +"' z='3.5' reward='1' tolerance='0.5'/>"
+
+    return s
 
 def GetMissionXML():
-    my_xml = """""<DrawBlock x='3' y='2' z='3' type = 'diamond_ore' />"" ""<DrawBlock x='5' y='2' z='3' type = 'diamond_ore' />"""""
 
+    #<RewardForMissionEnd rewardForDeath="-200">
+    #                    <Reward reward="0" description="Mission End"/>
+    #                    </RewardForMissionEnd>
     
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -152,8 +236,7 @@ def GetMissionXML():
                     <ServerHandlers>
                         <FlatWorldGenerator generatorString="3;1*minecraft:grass;1;"/>
                         <DrawingDecorator>''' + \
-                              "<DrawCuboid x1='-6' x2='6' y1='-1' y2='250' z1='-6' z2='6' type='air'/>" +\
-                            genMap()+\
+                                              genMap()+ \
                             '''
                         </DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
@@ -164,24 +247,27 @@ def GetMissionXML():
                     <Name>CS175TheDropper</Name>
                     <AgentStart>
                         <Placement x="2.5" y="250" z="2.5" pitch="90" yaw="0"/>
-                        <Inventory>
-                            <InventoryItem slot="0" type="diamond_pickaxe"/>
-                        </Inventory>
                     </AgentStart>
                     <AgentHandlers>
                         <DiscreteMovementCommands/>
                         <ObservationFromFullStats/>
                         <RewardForTouchingBlockType>
-							<Block type = "glass" reward = '-1'/>
+                        <Block type = "water" reward = '200' behaviour = 'onceOnly'/>	
+                        <Block type = "obsidian" reward = "-200" behaviour = "onceOnly"/>
                         </RewardForTouchingBlockType>
-                        
+                        <RewardForReachingPosition>''' + \
+                        gen_marker_reward() + \
+                        '''
+                        </RewardForReachingPosition>
                         <ObservationFromGrid>
                             <Grid name="floorAll">
                                 <min x="-1" y="-9" z="-1"/>
                                 <max x="1" y="0" z="1"/>
                             </Grid>
                         </ObservationFromGrid>
-                        <AgentQuitFromReachingCommandQuota total="'''+str(MAX_EPISODE_STEPS)+'''" />
+                        <AgentQuitFromTouchingBlockType>
+                        <Block type = "water"/>
+                        </AgentQuitFromTouchingBlockType>
                     </AgentHandlers>
                 </AgentSection>
             </Mission>'''
@@ -192,23 +278,27 @@ def get_action(obs, q_network, epsilon):
         # Calculate Q-values fot each action
         obs_torch = torch.tensor(obs.copy(), dtype=torch.float).unsqueeze(0)
         action_values = q_network(obs_torch)
+
+        action_prob = [epsilon/4.0, epsilon/4.0, epsilon/4.0, epsilon/4.0]
+        actions = [0, 1, 2, 3]
+
+        # Select action with highest Q-value
+        action_idx = torch.argmax(action_values).item()
+
+        action_prob[action_idx] += (1-epsilon)
+        action_i = np.random.choice(actions, p=action_prob)
         
-        p = np.random.random() 
-        if p < epsilon: 
-                action_idx = random.randint(0, 3)
-        else:
-            action_idx = torch.argmax(action_values).item()
-    return action_idx
+    return action_i
 
-
+  
 def init_malmo(agent_host):
     """
     Initialize new malmo mission.
     """
     my_mission = MalmoPython.MissionSpec(GetMissionXML(), True)
     my_mission_record = MalmoPython.MissionRecordSpec()
-    my_mission.requestVideo(800, 500)
-    my_mission.setViewpoint(1)
+    my_mission.requestVideo(1200, 700)
+    my_mission.setViewpoint(0)
 
     max_retries = 3
     my_clients = MalmoPython.ClientPool()
@@ -255,7 +345,7 @@ def get_observation(world_state):
             # Get observation
             #print(observations)
             grid = observations['floorAll']
-            grid_binary = [1 if x == 'glass' or x == 'water' else 0 for x in grid]
+            grid_binary = [1 if x == 'obsidian' or x == 'water' else 0 for x in grid]
             obs = np.reshape(grid_binary, (10, OBS_SIZE, OBS_SIZE))
 
             # Rotate observation with orientation of agent
@@ -266,7 +356,7 @@ def get_observation(world_state):
                 obs = np.rot90(obs, k=2, axes=(1, 2))
             elif yaw == 90:
                 obs = np.rot90(obs, k=3, axes=(1, 2))
-            
+
             break
     #print(obs)
     return obs
@@ -292,9 +382,9 @@ def prepare_batch(replay_buffer):
     next_obs = torch.tensor([x[2] for x in batch_data], dtype=torch.float)
     reward = torch.tensor([x[3] for x in batch_data], dtype=torch.float)
     done = torch.tensor([x[4] for x in batch_data], dtype=torch.float)
-    
+
     return obs, action, next_obs, reward, done
-  
+
 
 def learn(batch, optim, q_network, target_network):
     """
@@ -379,7 +469,7 @@ def train(agent_host):
         agent_host = init_malmo(agent_host)
         world_state = agent_host.getWorldState()
         while not world_state.has_mission_begun:
-            time.sleep(0.2)
+            time.sleep(.1)
             world_state = agent_host.getWorldState()
             for error in world_state.errors:
                 print("\nError:",error.text)
@@ -392,21 +482,23 @@ def train(agent_host):
             command = ACTION_DICT[action_idx]
 
             # Take step
+            # print(command)
             agent_host.sendCommand(command)
+            #print('b')
 
             # If your agent isn't registering reward you may need to increase this
-            time.sleep(.1)
+            time.sleep(0.3)
 
             # We have to manually calculate terminal state to give malmo time to register the end of the mission
             # If you see "commands connection is not open. Is the mission running?" you may need to increase this
             episode_step += 1
             print(episode_step)
             if episode_step >= MAX_EPISODE_STEPS or \
-                    (obs[0, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 1 and \
-                    obs[1, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 0 and \
+               (obs[0, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 1 and \
+                     obs[1, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 0 and \
                     command == 'move 1'):
                 done = True
-                time.sleep(6)  
+                time.sleep(10)  
 
             # Get next observation
             world_state = agent_host.getWorldState()
@@ -440,9 +532,9 @@ def train(agent_host):
         num_episode += 1
         returns.append(episode_return)
         steps.append(global_step)
-        avg_return = sum(returns[-min(len(returns), 10):]) / min(len(returns), 10)
+        avg_return = sum(returns)/ (len(returns))
         loop.update(episode_step)
-        loop.set_description('Episode: {} Steps: {} Time: {:.2f} Loss: {:.2f} Last Return: {:.2f} Avg Return: {:.2f}'.format(
+        loop.set_description('Episode: {} Steps: {} Time: {:.2f} Loss: {:.2f} Last Return: {:.2f} Avg Return: {:.4f}'.format(
             num_episode, global_step, (time.time() - start_time) / 60, episode_loss, episode_return, avg_return))
 
         if num_episode > 0 and num_episode % 10 == 0:
