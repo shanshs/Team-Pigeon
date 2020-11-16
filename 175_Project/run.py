@@ -18,7 +18,7 @@ try:
 except:
     import MalmoPython
 
-
+    
 # Hyperparameters
 SIZE =50
 REWARD_DENSITY = .1
@@ -53,7 +53,7 @@ class QNetwork(nn.Module):
     #-------------------------------------
 
     def __init__(self, obs_size, action_size, hidden_size=90):
-        print(obs_size)
+        #print(obs_size)
         super().__init__()
         self.net = nn.Sequential(nn.Linear(np.prod(obs_size), hidden_size),
                                  nn.ReLU(),
@@ -78,6 +78,7 @@ def genString(x,y,z, blocktype):
     Returns string to Draw block of a blocktype at given coordinates
     """
     return '<DrawBlock x="' + str(x) + '" y="' + str(y) + '" z="' + str(z) + '" type="' + blocktype + '"/>'
+
 
 def genMap():
     """
@@ -186,7 +187,7 @@ def genMap():
                     if p <= OBSTACLE_DENSITY:
                         w = genString(X,Y,Z, 'obsidian')
                         mapStr += w
-
+                        
     return mapStr
 
 def gen_air():
@@ -194,6 +195,7 @@ def gen_air():
     for y in range(250):
         s += "<DrawBlock x='0'  y='"+ str(y) +"' z='0' type='air' />"
     return s
+
 
 def gen_marker_reward():
     s = ''
@@ -208,18 +210,9 @@ def gen_marker_reward():
         s += "<Marker x='3.5' y='" + str(y) +"' z='2.5' reward='1' tolerance='0.5'/>"
         s += "<Marker x='3.5' y='" + str(y) +"' z='3.5' reward='1' tolerance='0.5'/>"
 
-
     return s
 
 def GetMissionXML():
-    #------------------------------------
-    #
-    #   TODO: Spawn diamonds
-    #   TODO: Spawn lava
-    #   TODO: Add diamond reward
-    #   TODO: Add lava negative reward
-    #
-    #-------------------------------------
 
     #<RewardForMissionEnd rewardForDeath="-200">
     #                    <Reward reward="0" description="Mission End"/>
@@ -229,7 +222,7 @@ def GetMissionXML():
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
                 <About>
-                    <Summary>Dropper</Summary>
+                    <Summary>The Dropper</Summary>
                 </About>
 
                 <ServerSection>
@@ -251,7 +244,7 @@ def GetMissionXML():
                 </ServerSection>
 
                 <AgentSection mode="Survival">
-                    <Name>CS175Dropper</Name>
+                    <Name>CS175TheDropper</Name>
                     <AgentStart>
                         <Placement x="2.5" y="250" z="2.5" pitch="90" yaw="0"/>
                     </AgentStart>
@@ -297,7 +290,7 @@ def get_action(obs, q_network, epsilon):
         
     return action_i
 
-
+  
 def init_malmo(agent_host):
     """
     Initialize new malmo mission.
@@ -313,7 +306,7 @@ def init_malmo(agent_host):
 
     for retry in range(max_retries):
         try:
-            agent_host.startMission( my_mission, my_clients, my_mission_record, 0, "Dropper" )
+            agent_host.startMission( my_mission, my_clients, my_mission_record, 0, "The Dropper" )
             break
         except RuntimeError as e:
             if retry == max_retries - 1:
@@ -428,7 +421,7 @@ def log_returns(steps, returns):
     returns_smooth = np.convolve(returns, box, mode='same')
     plt.clf()
     plt.plot(steps, returns_smooth)
-    plt.title('Dropper Fixed Map')
+    plt.title('The Dropper')
     plt.ylabel('Return')
     plt.xlabel('Steps')
     plt.savefig('returns.png')
@@ -499,6 +492,7 @@ def train(agent_host):
             # We have to manually calculate terminal state to give malmo time to register the end of the mission
             # If you see "commands connection is not open. Is the mission running?" you may need to increase this
             episode_step += 1
+            print(episode_step)
             if episode_step >= MAX_EPISODE_STEPS or \
                (obs[0, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 1 and \
                      obs[1, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 0 and \
