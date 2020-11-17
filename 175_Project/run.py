@@ -18,7 +18,7 @@ try:
 except:
     import MalmoPython
 
-    
+
 # Hyperparameters
 SIZE =50
 REWARD_DENSITY = .1
@@ -26,8 +26,8 @@ PENALTY_DENSITY = .02
 OBSTACLE_DENSITY = 0.03
 OBS_SIZE = 3
 MAX_EPISODE_STEPS = 100
-MAX_GLOBAL_STEPS = 15000
-REPLAY_BUFFER_SIZE = 15000
+MAX_GLOBAL_STEPS = 10000
+REPLAY_BUFFER_SIZE = 10000
 EPSILON_DECAY = .999
 MIN_EPSILON = .1
 BATCH_SIZE = 128
@@ -53,7 +53,7 @@ class QNetwork(nn.Module):
     #-------------------------------------
 
     def __init__(self, obs_size, action_size, hidden_size=90):
-        #print(obs_size)
+        print(obs_size)
         super().__init__()
         self.net = nn.Sequential(nn.Linear(np.prod(obs_size), hidden_size),
                                  nn.ReLU(),
@@ -78,7 +78,6 @@ def genString(x,y,z, blocktype):
     Returns string to Draw block of a blocktype at given coordinates
     """
     return '<DrawBlock x="' + str(x) + '" y="' + str(y) + '" z="' + str(z) + '" type="' + blocktype + '"/>'
-
 
 def genMap():
     """
@@ -124,16 +123,26 @@ def genMap():
         mapStr += w         
         w = genString(3,1,2, 'glass')
         mapStr += w 
-        w = genString(1,2,1, 'obsidian')
+        w = genString(1,2,1, 'water')
         mapStr += w
-        w = genString(1,2,3, 'obsidian')
+        w = genString(1,1,1, 'glass')
+        mapStr += w
+        w = genString(1,2,3, 'water')
         mapStr += w    
-        w = genString(2,2,2, 'obsidian')
+        w = genString(1,1,3, 'glass')
+        mapStr += w
+        w = genString(2,2,2, 'water')
         mapStr += w    
-        w = genString(3,2,3, 'obsidian')
+        w = genString(2,1,2, 'glass')
+        mapStr += w
+        w = genString(3,2,3, 'water')
         mapStr += w       
-        w = genString(3,2,1, 'obsidian')
+        w = genString(3,1,3, 'glass')
+        mapStr += w
+        w = genString(3,2,1, 'water')
         mapStr += w 
+        w = genString(3,1,1, 'glass')
+        mapStr += w
         
         # Some random obsidian block obstacles
         w = genString(2,100,2, 'obsidian')
@@ -187,7 +196,7 @@ def genMap():
                     if p <= OBSTACLE_DENSITY:
                         w = genString(X,Y,Z, 'obsidian')
                         mapStr += w
-                        
+
     return mapStr
 
 def gen_air():
@@ -195,7 +204,6 @@ def gen_air():
     for y in range(250):
         s += "<DrawBlock x='0'  y='"+ str(y) +"' z='0' type='air' />"
     return s
-
 
 def gen_marker_reward():
     s = ''
@@ -217,12 +225,17 @@ def GetMissionXML():
     #<RewardForMissionEnd rewardForDeath="-200">
     #                    <Reward reward="0" description="Mission End"/>
     #                    </RewardForMissionEnd>
+
+    #<RewardForReachingPosition>''' + \
+    #                    gen_marker_reward() + \
+    #                    '''
+    #                    </RewardForReachingPosition>
     
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
                 <About>
-                    <Summary>The Dropper</Summary>
+                    <Summary>Dropper</Summary>
                 </About>
 
                 <ServerSection>
@@ -244,7 +257,7 @@ def GetMissionXML():
                 </ServerSection>
 
                 <AgentSection mode="Survival">
-                    <Name>CS175TheDropper</Name>
+                    <Name>CS175Dropper</Name>
                     <AgentStart>
                         <Placement x="2.5" y="250" z="2.5" pitch="90" yaw="0"/>
                     </AgentStart>
@@ -252,13 +265,9 @@ def GetMissionXML():
                         <DiscreteMovementCommands/>
                         <ObservationFromFullStats/>
                         <RewardForTouchingBlockType>
-                        <Block type = "water" reward = '200' behaviour = 'onceOnly'/>	
-                        <Block type = "obsidian" reward = "-200" behaviour = "onceOnly"/>
+                        <Block type = "water" reward = '100' behaviour = 'onceOnly'/>	
                         </RewardForTouchingBlockType>
-                        <RewardForReachingPosition>''' + \
-                        gen_marker_reward() + \
-                        '''
-                        </RewardForReachingPosition>
+                        <RewardForTimeTaken initialReward="0" delta="1" density="PER_TICK"/>
                         <ObservationFromGrid>
                             <Grid name="floorAll">
                                 <min x="-1" y="-9" z="-1"/>
@@ -290,7 +299,7 @@ def get_action(obs, q_network, epsilon):
         
     return action_i
 
-  
+
 def init_malmo(agent_host):
     """
     Initialize new malmo mission.
@@ -306,7 +315,7 @@ def init_malmo(agent_host):
 
     for retry in range(max_retries):
         try:
-            agent_host.startMission( my_mission, my_clients, my_mission_record, 0, "The Dropper" )
+            agent_host.startMission( my_mission, my_clients, my_mission_record, 0, "Dropper" )
             break
         except RuntimeError as e:
             if retry == max_retries - 1:
@@ -319,16 +328,7 @@ def init_malmo(agent_host):
 
 
 def get_observation(world_state):
-    """
-    Use the agent observation API to get a 2 x 5 x 5 grid around the agent. 
-    The agent is in the center square facing up.
 
-    Args
-        world_state: <object> current agent world state
-
-    Returns
-        observation: <np.array>
-    """
     obs = np.zeros((10, OBS_SIZE, OBS_SIZE))
 
     while world_state.is_mission_running:
@@ -421,7 +421,7 @@ def log_returns(steps, returns):
     returns_smooth = np.convolve(returns, box, mode='same')
     plt.clf()
     plt.plot(steps, returns_smooth)
-    plt.title('The Dropper')
+    plt.title('Dropper')
     plt.ylabel('Return')
     plt.xlabel('Steps')
     plt.savefig('returns.png')
@@ -492,7 +492,6 @@ def train(agent_host):
             # We have to manually calculate terminal state to give malmo time to register the end of the mission
             # If you see "commands connection is not open. Is the mission running?" you may need to increase this
             episode_step += 1
-            print(episode_step)
             if episode_step >= MAX_EPISODE_STEPS or \
                (obs[0, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 1 and \
                      obs[1, int(OBS_SIZE/2)-1, int(OBS_SIZE/2)] == 0 and \
