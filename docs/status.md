@@ -99,7 +99,7 @@ The agent is greatly rewarded with 100 points for completeing the objective and 
 
 By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters.
 
-<div style="text-align:center"><img src="returns_PPO.png" width="450" height="290"/></div>
+<div style="text-align:center"><img src="returns_DQN.png" width="450" height="290"/></div>
 
 As seen in the graph above, the returns fluctuate quite a bit. This is in part due to the nature of the Dropper. As the agent falls and gets closer to the ground it keeps on gaining points eventually receiving a lot for reaching the water, but should a random action taken due to the e-greedy policy result in its death, the agent loses out on a lot of points and thus has a much lower return value resulting in the many peaks and valleys. Despite this, the graph still shows an overall upward trend, meaning that as time goes on and the number of episodes increases, the agent tends to get farther down and lands in the water much more often.
 
