@@ -2,6 +2,9 @@
 layout: default
 title:  Status
 ---
+## Video
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uR0HirVSii8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Project Summary
 
@@ -91,6 +94,7 @@ R(s)=\left\{
 	\end{aligned}
 	\right.
 $$
+
 The agent is greatly rewarded with 100 points for completeing the objective and reaching the water safely and is punished for hitting obstacles receiving -25 points. However, we wanted to ensure that the agent wouldn't spend time randomly moving until it luckily lands in the water or hits an obstacle so we added another reward for staying alive as long as possible in order to encourage the agent to dodge obstacles and get lower in the tunnel. Thus we gave the agent 1 point for every millisecond it remained alive.
 
 By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters.
