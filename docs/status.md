@@ -36,13 +36,13 @@ To keep simplicity, our agent always faces the north and only takes discrete act
 * Move backwards
 
 
-We are primarily using Reinforcement Learning for our approach for the project.
+We are primarily using Reinforcement Learning for our approach for the project, using the below DQN algorithm.
 
 $$
 Q(S_t, A_t)\leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma\max_a Q(S_{t+1},a)- Q(s_t, A_t)]
 $$
 
-We use DQN learning to train our agent:
+We used DQN learning to train our agent:
 
 ```
 For each episode:
@@ -68,12 +68,13 @@ $$
 	\right.
 $$
  
-We create an array called action_prob to save the probabilities for each action. Then, we calculate action_prob base on the formula above and use np.random.choice chooses an action based on the probabilities in action_prob array.
+We created an list called action_prob to save the probabilities for each action. Then, we calculate action_prob based on the formula above and randomly choose an action based on the probabilities in action_prob list.
 
 
 
-We also tried out another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
+We also experimented another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
 
+Currently, we are still working on our approach and are considering changes to other reinforcement learning methods.
 
 ## Evaluation
 
@@ -83,13 +84,13 @@ We evaluate our agent on its performance with its average score while performing
 
 By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters.
 
--**DQN**
+- **DQN**
 
 <div style="text-align:center"><img src="returns_DQN.png" width="450" height="290"/></div>
 
 As seen in the graph above, the returns fluctuate quite a bit. This is in part due to the nature of the Dropper. As the agent falls and gets closer to the ground it keeps on gaining points eventually receiving a lot for reaching the water, but should a random action taken due to the e-greedy policy result in its death, the agent loses out on a lot of points and thus has a much lower return value resulting in the many peaks and valleys. Despite this, the graph still shows an overall upward trend, meaning that as time goes on and the number of episodes increases, the agent tends to get farther down and lands in the water much more often.
 
--**PPO**
+- **PPO**
 
 <div style="text-align:center"><img src="returns_ppo_9_hours_40k_steps.png" width="450" height="290"/></div>
 
