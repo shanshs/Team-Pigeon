@@ -16,7 +16,7 @@ import gym, ray
 from gym.spaces import Discrete, Box
 from ray.rllib.agents import ppo
 
-
+OBSTACLE_DENSITY = 0.10
 class DropperSimulator(gym.Env):
 
     def __init__(self, env_config):  
@@ -32,9 +32,10 @@ class DropperSimulator(gym.Env):
             0: 'move 1',  # Move one block forward
             1: 'strafe -1',  # Moves left
             2: 'strafe 1',  # Moves right
-            3: 'move -1'  # Moves back
+            3: 'move -1',  # Moves back
+            4: 'move 0'  # Moves 0
         }
-
+        
         # Rllib Parameters
         self.action_space = Discrete(len(self.action_dict))
         self.observation_space = Box(0, 1, shape=(np.prod([10, self.obs_size, self.obs_size]), ), dtype=np.int32)
@@ -111,6 +112,7 @@ class DropperSimulator(gym.Env):
             print("false")
             done = True
             self.num_episode += 1
+            self.agent_host.sendCommand(" Reward : " + str(self.episode_return))
             print("DONE- Episode Number: " + str(self.num_episode) + " Reward : " + str(self.episode_return))
             time.sleep(5) 
             # Get Observation
@@ -188,6 +190,28 @@ class DropperSimulator(gym.Env):
         # o x o
         # x o x   water = o, obsidian = x, for the first floor
         
+        # Edit: it's just water on the first floor.
+        i = 2
+        w = self.genString(1,i,2, 'water')
+        mapStr += w
+        w = self.genString(1,i,3, 'water') #
+        mapStr += w    
+        w = self.genString(2,i,1, 'water')
+        mapStr += w    
+        w = self.genString(2,i,3, 'water')
+        mapStr += w  
+        w = self.genString(3,i,1, 'water') #
+        mapStr += w     
+        w = self.genString(3,i,2, 'water')
+        mapStr += w         
+        w = self.genString(1,i,1, 'water') #
+        mapStr += w
+        w = self.genString(2,i,2, 'water') #
+        mapStr += w    
+        w = self.genString(3,i,3, 'water') #
+        mapStr += w        
+        
+        
         i = 1
         w = self.genString(1,i,2, 'water')
         mapStr += w
@@ -206,8 +230,28 @@ class DropperSimulator(gym.Env):
         w = self.genString(2,i,2, 'water') #
         mapStr += w    
         w = self.genString(3,i,3, 'water') #
-        mapStr += w       
+        mapStr += w
         
+        i = 0
+        w = self.genString(1,i,2, 'wool')
+        mapStr += w
+        w = self.genString(1,i,3, 'wool') #
+        mapStr += w    
+        w = self.genString(2,i,1, 'wool')
+        mapStr += w    
+        w = self.genString(2,i,3, 'wool')
+        mapStr += w  
+        w = self.genString(3,i,1, 'wool') #
+        mapStr += w     
+        w = self.genString(3,i,2, 'wool')
+        mapStr += w         
+        w = self.genString(1,i,1, 'wool') #
+        mapStr += w
+        w = self.genString(2,i,2, 'wool') #
+        mapStr += w    
+        w = self.genString(3,i,3, 'wool') #
+        mapStr += w        
+        '''
         # Some random obsidian block obstacles
         w = self.genString(2,100,2, 'obsidian')
         mapStr += w    
@@ -232,14 +276,26 @@ class DropperSimulator(gym.Env):
         w = self.genString(3,80,3, 'obsidian')
         mapStr += w    
         w = self.genString(2,80,3, 'obsidian')
+        '''
+        
+        for X in range(1,4):
+            for Z in range(1,4):
+                for Y in range(5, 230, 20):
+                    p = np.random.random() 
+                    if p <= OBSTACLE_DENSITY:
+                        w = self.genString(X,Y,Z, 'obsidian')
+                        print(w)
+                        mapStr += w        
         mapStr += w    
         
         return mapStr
     
     def gen_air(self):
         s = ''
-        for y in range(250):
-            s += "<DrawBlock x='0'  y='"+ str(y) +"' z='0' type='air' />"
+        for X in range(1,4):
+            for Z in range(1,4):        
+                for Y in range(2, 240):
+                    s += "<DrawBlock x='{}'  y='{}' z='{}' type='air' />".format(X,Y,Z)
         return s
     def gen_marker_reward(self):
         s = ''
@@ -283,7 +339,7 @@ class DropperSimulator(gym.Env):
                         <ServerHandlers>
                             <FlatWorldGenerator generatorString="3;1*minecraft:grass;1;"/>
                             <DrawingDecorator>''' + \
-                                                  self.genMap()+ self.gen_air() +\
+                                                  self.gen_air() + self.genMap() +\
                                 '''
                             </DrawingDecorator>
                             <ServerQuitWhenAnyAgentFinishes/>
