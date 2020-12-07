@@ -25,6 +25,7 @@ class DropperSimulator(gym.Env):
         self.reward_density = .1
         self.penalty_density = .02
         self.obs_size = 3
+        self.depth = 30
         self.max_episode_steps = 30
         self.log_frequency = 10
         self.num_episode = 0
@@ -38,7 +39,7 @@ class DropperSimulator(gym.Env):
         
         # Rllib Parameters
         self.action_space = Discrete(len(self.action_dict))
-        self.observation_space = Box(0, 1, shape=(np.prod([10, self.obs_size, self.obs_size]), ), dtype=np.int32)
+        self.observation_space = Box(0, 1, shape=(np.prod([self.depth, self.obs_size, self.obs_size]), ), dtype=np.int32)
 
         # Malmo Parameters
         self.agent_host = MalmoPython.AgentHost()
@@ -370,8 +371,8 @@ class DropperSimulator(gym.Env):
                             </RewardForMissionEnd>
                         <ObservationFromGrid>
                                 <Grid name="floorAll">
-                                    <min x="-1" y="-9" z="-1"/>
-                                    <max x="1" y="0" z="1"/>
+                                    <min x="-''' + str(int(self.obs_size/2)) + '''" y="-''' + str(self.depth - 1) + '''" z="-''' + str(int(self.obs_size/2)) + '''"/>
+                                    <max x="''' + str(int(self.obs_size/2)) + '''" y="0" z="''' + str(int(self.obs_size/2)) + '''"/>
                                 </Grid>
                                 </ObservationFromGrid>
                             
@@ -430,7 +431,7 @@ class DropperSimulator(gym.Env):
         Returns
             observation: <np.array>
         """
-        obs = np.zeros((10, self.obs_size, self.obs_size))
+        obs = np.zeros((self.depth, self.obs_size, self.obs_size))
 
         while world_state.is_mission_running:
             time.sleep(0.1)
@@ -446,7 +447,7 @@ class DropperSimulator(gym.Env):
                 # Get observation
                 grid = observations['floorAll']
                 grid_binary = [1 if x == 'obsidian' else 0 for x in grid]
-                obs = np.reshape(grid_binary, (10, self.obs_size, self.obs_size))
+                obs = np.reshape(grid_binary, (self.depth, self.obs_size, self.obs_size))
 
                 # Rotate observation with orientation of agent
                 yaw = observations['Yaw']
