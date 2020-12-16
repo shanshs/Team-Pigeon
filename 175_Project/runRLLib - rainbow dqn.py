@@ -37,7 +37,7 @@ class DropperSimulator(gym.Env):
             3: 'move -1',  # Moves back
             4: 'move 0'  # Moves 0
         }
-        
+        self.landInWater = False
         # Rllib Parameters
         self.action_space = Discrete(len(self.action_dict))
         self.observation_space = Box(0, 1, shape=(np.prod([self.depth, self.obs_size, self.obs_size]), ), dtype=np.int32)
@@ -76,6 +76,7 @@ class DropperSimulator(gym.Env):
         self.episode_step = 0
         
         # Log
+        self.log_returnsEpisode()
         if len(self.returns) > self.log_frequency and \
             len(self.returns) % self.log_frequency == 0:
             self.log_returns()
@@ -285,7 +286,7 @@ class DropperSimulator(gym.Env):
         
         for X in range(1,4):
             for Z in range(1,4):
-                for Y in range(5, 230, 20):
+                for Y in range(15, 230, 20):
                     p = np.random.random() 
                     if p <= OBSTACLE_DENSITY:
                         w = self.genString(X,Y,Z, 'obsidian')
@@ -488,8 +489,9 @@ class DropperSimulator(gym.Env):
                 f.write("{}\t{}\n".format(step, value)) 
 
       
-        
-        
+    def log_returnsEpisode(self):     
+        with open('returns2.txt', 'a') as f:
+            f.write("{}\t{}\n".format(self.num_episode, self.returns[-1]))         
         
 if __name__ == '__main__':
     ray.init()
