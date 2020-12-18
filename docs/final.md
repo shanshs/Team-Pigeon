@@ -12,7 +12,7 @@ The agent will spawn at the top of the tunnel and begin falling from it. The goa
 
 <div style="text-align:center"><img src="summary3.png" width="500" height="330"/></div>
 
-This problem isn’t trivial because the solution can be quite complex. There are a lot of ways to reward and punish the agent and finding the best way takes a lot of time. The falling speed of the agent raises another challenge for the project since we are not able to control the falling speed of the agent. If the sleep time is too long, the agent makes less move so it will dodge obstacles; if the sleep time is too short, the reward of landing in water doesn’t get registered. Also, if the gap between two obstacles is too short, the agent would not have enough time to make a move with unsuitable sleep time.
+This problem isn’t trivial because the solution can be quite complex. There are a lot of ways to reward and punish the agent and finding the best way takes a lot of time. The falling speed of the agent raises another challenge and it is the biggest challenge of this project since we are not able to control the falling speed of the agent, so we can only adjust the value of other parameters to adapt it. Our team has to find the most suitable obstacle density and sleep time of the agent. If the sleep time is too long, the agent makes less move so it will dodge obstacles; if the sleep time is too short, the reward of landing in water doesn’t get registered. Also, if the gap between two obstacles is too short, the agent would not have enough time to make a move with unsuitable sleep time.
 
 To find the most proper way to solve the problems above, our team would have to run the model overnight often time. 
 
