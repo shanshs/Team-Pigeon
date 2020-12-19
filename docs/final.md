@@ -50,7 +50,9 @@ $$
 The algorithm can be interpreted as this:
 (Updated Q Value) --> (Current Q Value) + (Learning Rate)[Reward + (Discount Rate)*(Max Expected Reward)- (Current Q Value)]
 
-We used DQN learning to train our agent:
+We used several different algorithmic approaches ranging from DQN learning and PPO to train our agent:
+
+For one of our DQN approaches:
 
 ```
 For each episode:
@@ -78,10 +80,16 @@ $$
  
 We created an list called action_prob to save the probabilities for each action. Then, we calculate action_prob based on the formula above and randomly choose an action based on the probabilities in action_prob list.
 
-
 We also experimented another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
 
+< Insert ppo stuff here > 
 
+
+Lastly, we experimented with one last approach: Rainbow DQN, a combination of several improvements DQN algorithms.
+
+<Insert rainbow stuff here >
+
+ 
 ## Evaluation
 
 | Syntax      | Description |
