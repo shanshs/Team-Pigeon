@@ -84,6 +84,11 @@ We also experimented another reinforcement learning algorithm called Proximal Po
 
 ## Evaluation
 
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+
 ## References
 CS175 Assignment 2's DQN algorithm
 
