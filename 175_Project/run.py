@@ -26,7 +26,7 @@ OBSTACLE_DENSITY = 0.2
 OBS_SIZE = 3
 DEPTH = 40
 MAX_EPISODE_STEPS = 100
-MAX_GLOBAL_STEPS = 10000
+MAX_GLOBAL_STEPS = 1000000
 REPLAY_BUFFER_SIZE = 10000
 EPSILON_DECAY = .999
 MIN_EPSILON = .1
@@ -55,7 +55,7 @@ class QNetwork(nn.Module):
     def __init__(self, obs_size, action_size, hidden_size=200):
         super().__init__()
         self.net = nn.Sequential(nn.Linear(np.prod(obs_size), hidden_size),
-                                 nn.ReLU(),
+                                 nn.Tanh(),
                                  nn.Linear(hidden_size, 100),
                                  nn.Softplus(),
                                  nn.Linear(100, 4))
@@ -315,28 +315,7 @@ def learn(batch, optim, q_network, target_network):
     return loss.item()
 
 
-def log_returnsa(steps, returns):
-    """
-    Log the current returns as a graph and text file
-
-    Args:
-        steps (list): list of global steps after each episode
-        returns (list): list of total return of each episode
-    """
-    box = np.ones(10) / 10
-    returns_smooth = np.convolve(returns, box, mode='same')
-    plt.clf()
-    plt.plot(steps, returns_smooth)
-    plt.title('Dropper')
-    plt.ylabel('Return')
-    plt.xlabel('Steps')
-    plt.savefig('returns1.png')
-
-    with open('returns1.txt', 'w') as f:
-        for value in returns:
-            f.write("{}\n".format(value)) 
-
-def log_returns(steps, returns):
+def log_returns(steps, returns, fileName, xlabel):
     """
     Log the current returns as a graph and text file
 
@@ -349,17 +328,21 @@ def log_returns(steps, returns):
     
     plt.title('Dropper')
     plt.ylabel('Return')
-    plt.xlabel('Steps')
-    plt.savefig('returns1.png')
-
+    plt.xlabel(xlabel)
+    plt.savefig(fileName)
 
 def AvgReturn(suc_return):
     df = pd.DataFrame(suc_return, columns = ['num_episode', 'AvgSuccess']) 
+    
+    if suc_return[-1][0]>= 1999:
+        print(df)
+        
     ax = plt.subplot(111, frame_on=False)
     ax.xaxis.set_visible(False)
     ax.yaxis.set_visible(False)
     table(ax, df, loc='center')
-    plt.savefig('AvgReturn1.png')
+    plt.savefig('AvgReturnff.png')
+    
     
 
 def train(agent_host):
@@ -388,8 +371,11 @@ def train(agent_host):
     returns = []
     suc_return = []
     steps = []
+    stepse = []
     success = 0
     avg_re = []
+    avg_ree = []
+    eps = []
 
     # Begin main loop
     loop = tqdm(total=MAX_GLOBAL_STEPS, position=0, leave=False)
@@ -398,7 +384,7 @@ def train(agent_host):
         episode_return = 0
         episode_loss = 0
         done = False
-        if num_episode%200 == 0:
+        if num_episode%500 == 0:
             success = 0
 
         # Setup Malmo
@@ -469,16 +455,26 @@ def train(agent_host):
         steps.append(global_step)
         avg_return = sum(returns)/ (len(returns))
         avg_re.append(avg_return)
+        if len(returns) >= 500:
+            stepse.append(global_step)
+            avg_returne = sum(returns[len(returns)-495:-1])/ (len(returns[len(returns)-495:-1]))
+            avg_ree.append(avg_returne)
+            eps.append(num_episode)
         loop.update(episode_step)
         loop.set_description('Episode: {} Steps: {} Time: {:.2f} Loss: {:.2f} Last Return: {:.2f} Avg Return: {:.4f}'.format(
             num_episode, global_step, (time.time() - start_time) / 60, episode_loss, episode_return, avg_return))
 
         if num_episode > 0 and num_episode % 20 == 0:
-            log_returns(steps, avg_re)
+            log_returns(steps, avg_re, "AllAvg.png", "Steps")
+            print()
+            
+        if num_episode > 0 and num_episode % 500 == 0:
+            log_returns(stepse, avg_ree, "500AvgStep.png", "Steps")
+            log_returns(eps, avg_ree, "500AvgEps.png", "Episode")
             print()
          
-        if num_episode > 0 and num_episode % 100 == 0:
-            suc_return.append([num_episode,success/5])
+        if num_episode > 0 and num_episode % 500 == 0:
+            suc_return.append([num_episode,success/500])
             AvgReturn(suc_return)
 
     
