@@ -91,7 +91,7 @@ We also experimented with one approach as an extension to DQN: Rainbow DQN, a co
 Essentially, Rainbow DQN is a dubbed term of a combination of extensions of DQN. These include the following: Double Q-learning, prioritized replay, dueling networks, multi-step learning, distributional reinforcement learning, and noisy neural network stream. A more in-depth explanation of these terms are included in the research paper in our [source](https://arxiv.org/pdf/1710.02298.pdf) .
 
 
-#### PPO
+### PPO
 
 We also experimented another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
 
@@ -114,6 +114,7 @@ For each episode:
 | Header      | Title       |
 | Paragraph   | Text        |
 
+### DQN
 
 <div style="text-align:center"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
@@ -128,6 +129,8 @@ For each episode:
 | ... 	| ... 	| ... 	|
 | 13000-13700 	| 56.8 	| 12.8 	|
 | 13500-13900 	| 54.1 	| 12.1 	|
+
+### Rainbow DQN
 
 <div style="text-align:center"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
 
@@ -145,6 +148,8 @@ For each episode:
 | 3600-3800 	| 97.2 	| 49.5 	|
 | 3800-4000 	| 92.9 	| 47.5 	|
 | 4000-4200 	| 99.6 	| 52 	|
+
+### PPO
 
 <div style="text-align:center"><img src="returns_pponew.png" width="450" height="290"/></div>
 
