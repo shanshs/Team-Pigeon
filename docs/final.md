@@ -50,6 +50,10 @@ $$
 The algorithm can be interpreted as this:
 (Updated Q Value) --> (Current Q Value) + (Learning Rate)[Reward + (Discount Rate)*(Max Expected Reward)- (Current Q Value)]
 
+Our agent will take a 3 x 30 x 3 grid of the blocks around it as observation. Since our map is a vertical tunnel and the agent drops from the top of the tunnel, the falling speed of the agent is fast. Therefore, we set the grid so that the agent can 'see' 30 levels or blocks down in order for it to have enough time to dodge obstacles.
+
+Each episode will see the agent taking the above actions until it reaches a terminal state of either successfully landing in the pool of water or dying from hitting an obstacle.
+
 We used several different algorithmic approaches ranging from DQN learning and PPO to train our agent:
 
 For one of our DQN approaches:
@@ -64,9 +68,6 @@ For each episode:
       Update Q network
 ```
 
-Our agent will take a 3 x 30 x 3 grid of the blocks around it as observation. Since our map is a vertical tunnel and the agent drops from the top of the tunnel, the falling speed of the agent is fast. Therefore, we set the grid so that the agent can 'see' 30 levels or blocks down in order for it to have enough time to dodge obstacles.
-
-Each episode will see the agent taking the above actions until it reaches a terminal state of either successfully landing in the pool of water or dying from hitting an obstacle.
 To get the action of each step, we apply the following function from lecture:
 
 $$
@@ -82,9 +83,8 @@ We created an list called action_prob to save the probabilities for each action.
 
 We also experimented another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
 
-
+Below is a standard algorithm for PPO, although we used RLlib's implementation of it for use in our project.
 ```
-https://arxiv.org/pdf/1707.06347.pdf
 For each episode:
 	For each agent:
 		Run stotastic grading policy in environment for set number of time
@@ -93,9 +93,9 @@ For each episode:
 	Replace the old vector of policy parameters with the newly formed one
 ```
 
-Lastly, we experimented with one last approach: Rainbow DQN, a combination of several improvements DQN algorithms.
+Lastly, we experimented with one last approach: Rainbow DQN, a combination of several improvements DQN algorithms. RLlib provided us with an implementation of a standard DQN algorithm, and with a few given modifications we were able to easily transform it to Rainbow DQN.
 
-
+Essentially, Rainbow DQN is a dubbed term of a combination of extensions of DQN. These include the following: Double Q-learning, prioritized replay, dueling networks, multi-step learning, distributional reinforcement learning, and noisy neural network stream. A more in-depth explanation of these terms are included in the research paper in our sources.
 
  
 ## Evaluation
@@ -104,6 +104,7 @@ Lastly, we experimented with one last approach: Rainbow DQN, a combination of se
 | ----------- | ----------- |
 | Header      | Title       |
 | Paragraph   | Text        |
+
 
 ## References
 CS175 Assignment 2's DQN algorithm's episilon greedy policy
@@ -117,4 +118,5 @@ RLlib - https://docs.ray.io/
 Rainbow DQN - https://arxiv.org/pdf/1710.02298.pdf
 
 PPO - https://arxiv.org/pdf/1707.06347.pdf
+
 PyTorch and TensorFlow library
