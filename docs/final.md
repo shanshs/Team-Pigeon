@@ -6,7 +6,7 @@ title: Final Report
 ## Video
 
 ## Project Summary
-Our project attempts to have an agent complete a “Dropper” map, which is a map in which a player attempts to fall safely to the bottom while avoiding obstacles. Our agent will be completing a map in which there is a 5 block wide and 250 blocks high tunnel. Inside the tunnel, there are some randomly generated obsidian obstacles at different locations (By randomly generating the map, the agent sometimes meets a more complex situation: for example, it can go left to avoid hitting an obstacle, but that would cause a dead-end or narrow escape further down). At the bottom of the tunnel, there is a pool of water.
+Our project attempts to have an agent complete a “Dropper” map, which is a map in which a player attempts to fall safely to the bottom while avoiding obstacles. Our agent will be completing a map in which there is a 5 block wide and 250 blocks high tunnel. Inside the tunnel, there are some **randomly generated** obsidian obstacles at different locations (By randomly generating the map, the agent sometimes meets a more complex situation: for example, it can go left to avoid hitting an obstacle, but that would cause a dead-end or narrow escape further down). At the bottom of the tunnel, there is a pool of water.
 
 The agent will spawn at the top of the tunnel and begin falling from it. The goal of the mission is to let the agent reach the bottom of the tunnel and land in the pool of water safely without taking any damage. In this process, the agent will strafe in the air by moving in different directions to avoid all obsidian obstacles inside the tunnel to avoid dying from fall damage and make its way to the bottom.
 
@@ -135,7 +135,7 @@ We evaluate our agent on its performance while performing the mission. We origin
 
 ### DQN
 
-Based on the below data, it is seen that our original implementation of DQN was not very successful. The agent appears to slowly learn to navigate against obstacles and sometimes reach the bottom, but the agent seems to still make some random movements most of the time. While it may have improved slightly, its low success rate was not what our group was looking for. 
+Based on the below data, it is seen that our original implementation of DQN was not very successful. The agent appears to slowly learn to navigate against obstacles and sometimes reach the bottom, but the agent seems to still make some random movements most of the time. While it may have improved slightly, its low success rate was not what our group was looking for. This may be due to low amount of episodes/steps the agent takes before it starts to use purely the best action from the episilon greedy policy table. The agent at this point most likely still made a majority of random actions to complete the mission.
 
 
 <table><tr>
@@ -143,14 +143,14 @@ Based on the below data, it is seen that our original implementation of DQN was 
 <td> <img src="success_dqn1.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
 
-By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications.
+By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications. Our original DQN used simply one RELU activation layer for its Q network.
 
 <div style="text-align:center"><img src="success_dqn2.PNG	"/></div>
 
 
 ### PPO
 
-Based on the below data, PPO performed reasonably well compared to the others with an approximate success rate at about 20 to 25%. 
+Based on the below data, PPO performed reasonably well compared to the others with an approximate success rate at about 20 to 25%. The upwards trend in returns is more apparent and visible here. The returns also do not fluctuate as greatly as the original DQN, meaning the agent does not suddenly perform very well for a few episodes and then drop and perform and achieve the lowest possible rewards for the mission. The agent manages to survive the first few top floors of the tunnel, while also occasionally reaching the bottom sometimes.
 
 <table><tr>
 <td> <img src="returns_pponew.png" alt="img1" style="width: 500px;"/> </td>
@@ -159,7 +159,7 @@ Based on the below data, PPO performed reasonably well compared to the others wi
 
 ### Rainbow DQN
 
-Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm with additional hyperparameters performed the best out of the three algorithms we tested. 
+Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm with additional hyperparameters performed the best out of the three algorithms we tested. This was surprising, because after researching the Rainbow DQN algorithm and seeing the results in the paper about it, we did not expect the algorithm to work as well as it did on our project too. Compared to the bare DQN and PPO algorithms above, it is clear that the agent ends up receiving on average, much higher returns. The graph is much less densely populated with low average returns compared to the other two algorithms. The Rainbow DQN's average return and success rates are also about double, if not more, than the base DQN algorithm.  
 
 <table><tr>
 <td> <img src="returns-dqn-rainbow.png" alt="img1" style="width: 500px;"/> </td>
