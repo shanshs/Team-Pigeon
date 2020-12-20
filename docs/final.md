@@ -147,6 +147,11 @@ By modifying our implementation of the episilon greedy policy to fix a previous 
 
 <div style="text-align:center"><img src="newsuccess_dqn2.PNG"/></div>
 
+<table><tr>
+<td> <iframe width="560" height="315" src="https://www.youtube.com/embed/lxaZckCPLyw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<td> <iframe width="560" height="315" src="https://www.youtube.com/embed/REN80xghC7E" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</tr></table>
+
 ### PPO
 
 Based on the below data, PPO performed reasonably well compared to the others with an approximate success rate at about 20 to 25%. The upwards trend in returns is more apparent and visible here. The returns also do not fluctuate as greatly as the original DQN, meaning the agent does not suddenly perform very well for a few episodes and then drop and perform and achieve the lowest possible rewards for the mission. The agent manages to survive the first few top floors of the tunnel, while also occasionally reaching the bottom sometimes.
