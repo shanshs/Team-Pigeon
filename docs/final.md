@@ -89,14 +89,11 @@ The activation function is an essential element for neural network. Choosing the
 
 <div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div> <div style="text-align:center"><img src="Tanh.png" width="300" height="200"/></div> <div style="text-align:right"><img src="relu.png" width="300" height="200"/></div> 
 
-##### Sigmoid(): 
-Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
+- Sigmoid: Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
 
-##### Tanh(): 
-Zero centered, which makes negative, neutral, and strongly positive values easy to distinguish by the model. 
+- Tanh: Zero centered, which makes negative, neutral, and strongly positive values easy to distinguish by the model. 
 
-##### ReLU(): 
-This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
+- ReLU: This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
 
 
 
@@ -125,6 +122,8 @@ For each episode:
 
  
 ## Evaluation
+
+We evaluate our agent on its performance while performing the mission. We originally evaluated our agent solely on its performance on its steps vs return graph but found it to not be incredibly useful. By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters. Though we realized it was not incredibly clear to the viewer of the performance of the agent. We added an extra table to our evaluation set that includes a sample of data between a range of episodes the agent performs in. Each sample of data contains the average return and success rate for that range of episodes. We expected the agent to receive consistently high scores and to learn how to receive the maximum possible rewards, and learn to successfully complete the mission. Over time, we noticed that with our range of reinforcement learning algorithms, our agent improves and on average receives higher results. 
 
 
 | Syntax      | Description |
