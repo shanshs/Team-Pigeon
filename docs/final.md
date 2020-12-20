@@ -141,24 +141,24 @@ Based on the below data, it is seen that our original implementation of DQN was 
 
 <table><tr>
 <td> <img src="returns_torch_dqn.png" alt="img1" style="width: 500px;"/> </td>
+<td> <img src="newsuccess_dqn1.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
-
-| Episode Range   	| Average return   	| Success rate (%) 	|
-|-	|-	|-	|
-| 0-500 	| 36.1 	| 4.2 	|
-| 500-1000 	| 39.6 	| 6.6 	|
-| 1000-1500 	| 40.9 	| 7.4 	|
-| ... 	| ... 	| ... 	|
-| 5000-5500 	| 48.9 	| 9.9 	|
-| 5500-6000 	| 50.6 	| 10.6 	|
-| ... 	| ... 	| ... 	|
-| 13000-13700 	| 56.8 	| 12.8 	|
-| 13500-13900 	| 54.1 	| 12.1 	|
 
 By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications. Our original DQN used simply one RELU activation layer for its Q network.
 
 <div style="text-align:center"><img src="success_dqn2.PNG	"/></div>
 
+| Episode Range   | Success Rate (%) |
+|-----------------|------------------|
+| 0-500           | 14.6             |
+| 500-1000        | 22.6             |
+| 1000-1500       | 19.8             |
+| 1500-2000       | 30.2             |
+| 2000-2500       | 33.2             |
+| 3000-3500       | 35.6             |
+| 3500-4000       | 34.8             |
+| 4000-4500       | 32.6             |
+| 4500-5000       | 29.2             |
 
 ### PPO
 
@@ -166,22 +166,8 @@ Based on the below data, PPO performed reasonably well compared to the others wi
 
 <table><tr>
 <td> <img src="returns_pponew.png" alt="img1" style="width: 500px;"/> </td>
+<td> <img src="newsuccess_ppo.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
-
-| Episode Range   	| Average return   	| Success rate (%) 	|
-|-	|-	|-	|
-| 0-500 	| 28.0 	| 1.9 	|
-| 500-1000 	| 35.5 	| 2.8 	|
-| 1000-1500 	| 46.1 	| 6.6 	|
-| 1500-2000 	| 48.9 	| 9.6 	|
-| ... 	| ... 	| ... 	|
-| 5000-5500 	| 62.1 	| 16.3 	|
-| 5500-6000 	| 52.8 	| 14.9 	|
-| ... 	| ... 	| ... 	|
-| 6500-7000 	| 61.9 	| 21.16 	|
-| 7000-7250 	| 60.9 	| 18 	|
-| 7250-7500 	| 62.4 	| 20.3 	|
-| 7500-7800 	| 69.5 	| 26.19 	|
 
 ### Rainbow DQN
 
@@ -189,22 +175,8 @@ Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm 
 
 <table><tr>
 <td> <img src="returns-dqn-rainbow.png" alt="img1" style="width: 500px;"/> </td>
+<td> <img src="newsuccess_dqnRainbow.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
-
-| Episode Range    	| Average return    	| Success rate (%)    	|
-|-	|-	|-	|
-| 0-200 	| 40.9 	| 10.4 	|
-| 200-400 	| 44.9 	| 12 	|
-| 400-600 	| 52.6 	| 17.5 	|
-| 600-800 	| 67.2 	| 29 	|
-| 800-1000 	| 77.1 	| 34.5 	|
-| 1000-1200 	| 81.5 	| 39 	|
-| ... 	| ... 	| ... 	|
-| 3200-3400 	| 102.2 	| 54.5 	|
-| 3400-3600 	| 99.8 	| 52.5 	|
-| 3600-3800 	| 97.2 	| 49.5 	|
-| 3800-4000 	| 92.9 	| 47.5 	|
-| 4000-4200 	| 99.6 	| 52 	|
 
 While we were expecting a possibly higher success rate for the agent for our project, an approximate estimate of 50% success is quite good. We noticed that increasing the rate of obstacles in the tunnel did in fact lower the average returns and rewards for the agent, since sometimes the agent would be put into difficult situations. For example, if the agent was placed on the bottom left corner of the tunnel and was forced to move to the top right corner, the agent would not have enough time to "see" the difficult obstacle and move over to the corner in time. We found the environment challenging enough for both humans and the agent.
 
