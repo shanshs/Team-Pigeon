@@ -116,7 +116,7 @@ For each episode:
 
 ### DQN
 
-<div style="text-align:center"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
 | Episode Range   	| Average return   	| Success rate (%) 	|
 |-	|-	|-	|
@@ -132,7 +132,7 @@ For each episode:
 
 ### Rainbow DQN
 
-<div style="text-align:center"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
 
 | Episode Range    	| Average return    	| Success rate (%)    	|
 |-	|-	|-	|
@@ -151,7 +151,7 @@ For each episode:
 
 ### PPO
 
-<div style="text-align:center"><img src="returns_pponew.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="returns_pponew.png" width="450" height="290"/></div>
 
 | Episode Range   	| Average return   	| Success rate (%) 	|
 |-	|-	|-	|
