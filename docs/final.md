@@ -18,6 +18,19 @@ To find the most proper way to solve the problems above, our team had to experim
 
 ## Approaches
 
+**Activation Function**
+The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
+
+**Sigmoid()**: Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
+￼
+**Tanh()**: Zero centered, which makes negative, neutral, and strongly positive values easy to distinguish by the model. 
+￼
+**ReLU()**: This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
+￼
+
+￼
+
+
 Our agent's actions are being rewarded with the following:
 **Reward Function**
 $$
