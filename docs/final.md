@@ -22,12 +22,15 @@ The activation function is an essential element for neural network. Choosing the
 
 #### Sigmoid(): 
 Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
+<div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div>
 ￼
 #### Tanh(): 
 Zero centered, which makes negative, neutral, and strongly positive values easy to distinguish by the model. 
+<div style="text-align:left"><img src="Tanh.png" width="300" height="200"/></div>
 ￼
 #### ReLU(): 
 This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
+<div style="text-align:left"><img src="relu.png" width="300" height="200"/></div>
 ￼
 
 ￼
