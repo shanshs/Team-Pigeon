@@ -41,6 +41,7 @@ To keep simplicity, our agent always faces the north and only takes discrete act
 * Stand still
 
 
+### DQN
 We are primarily using Reinforcement Learning for our approach for the project, using the below DQN algorithm.
 
 $$
@@ -81,6 +82,17 @@ $$
  
 We created an list called action_prob to save the probabilities for each action. Then, we calculate action_prob based on the formula above and randomly choose an action based on the probabilities in action_prob list.
 
+< Explanation of additional layers to the dqn to be included here >
+
+#### Rainbow DQN
+
+We also experimented with one approach as an extension to DQN: Rainbow DQN, a combination of several improvements DQN algorithms. RLlib provided us with an implementation of a standard DQN algorithm, and with a few given modifications we were able to easily transform it to Rainbow DQN.
+
+Essentially, Rainbow DQN is a dubbed term of a combination of extensions of DQN. These include the following: Double Q-learning, prioritized replay, dueling networks, multi-step learning, distributional reinforcement learning, and noisy neural network stream. A more in-depth explanation of these terms are included in the research paper in our [source](https://arxiv.org/pdf/1710.02298.pdf) .
+
+
+#### PPO
+
 We also experimented another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
 
 Below is a standard algorithm for PPO, although we used RLlib's implementation of it for use in our project.
@@ -93,12 +105,9 @@ For each episode:
 	Replace the old vector of policy parameters with the newly formed one
 ```
 
-Lastly, we experimented with one last approach: Rainbow DQN, a combination of several improvements DQN algorithms. RLlib provided us with an implementation of a standard DQN algorithm, and with a few given modifications we were able to easily transform it to Rainbow DQN.
-
-Essentially, Rainbow DQN is a dubbed term of a combination of extensions of DQN. These include the following: Double Q-learning, prioritized replay, dueling networks, multi-step learning, distributional reinforcement learning, and noisy neural network stream. A more in-depth explanation of these terms are included in the research paper in our sources.
-
  
 ## Evaluation
+
 
 | Syntax      | Description |
 | ----------- | ----------- |
@@ -106,17 +115,41 @@ Essentially, Rainbow DQN is a dubbed term of a combination of extensions of DQN.
 | Paragraph   | Text        |
 
 
+<div style="text-align:center"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
+
+<div style="text-align:center"><img src="returns-dqn-rainbow" width="450" height="290"/></div>
+
+| Episode Range 	| Average return 	| Success rate (%) 	|
+|-	|-	|-	|
+| 0-200 	| 40.989 	| 10.44 	|
+| 200-400 	| 44.895 	| 12 	|
+| 400-600 	| 52.6 	| 17.5 	|
+| 600-800 	| 67.165 	| 29 	|
+| 800-1000 	| 77.05 	| 34.5 	|
+| 1000-1200 	| 81.48 	| 39 	|
+| ... 	| ... 	| ... 	|
+| 3200-3400 	| 102.211 	| 54.5 	|
+| 3400-3600 	| 99.75 	| 52.5 	|
+| 3600-3800 	| 97.243 	| 49.5 	|
+| 3800-4000 	| 92.955 	| 47.5 	|
+| 4000-4200 	| 99.582 	| 52 	|
+
+
+
+<div style="text-align:center"><img src="returns_pponew.png" width="450" height="290"/></div>
+
+
+
 ## References
 CS175 Assignment 2's DQN algorithm's episilon greedy policy
 
-https://github.com/microsoft/malmo
 
-Malmo - http://microsoft.github.io/malmo/0.30.0/Documentation/
+[Malmo](http://microsoft.github.io/malmo/0.30.0/Documentation/)
 
-RLlib - https://docs.ray.io/
+[RLlib](https://docs.ray.io/)
 
-Rainbow DQN - https://arxiv.org/pdf/1710.02298.pdf
+[Rainbow DQN](https://arxiv.org/pdf/1710.02298.pdf)
 
-PPO - https://arxiv.org/pdf/1707.06347.pdf
+[PPO](https://arxiv.org/pdf/1707.06347.pdf)
 
 PyTorch and TensorFlow library
