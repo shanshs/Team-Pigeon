@@ -84,7 +84,7 @@ We created an list called action_prob to save the probabilities for each action.
 
 To improve on our baseline DQN algorithm we fixed our implementation of the episilon greedy policy and passed the Q network through a series of layers and activation layers.
 
-#### Activation Function
+##### Activation Function
 The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
 
 <div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div> <div style="text-align:center"><img src="Tanh.png" width="300" height="200"/></div> <div style="text-align:right"><img src="relu.png" width="300" height="200"/></div> 
@@ -95,9 +95,8 @@ The activation function is an essential element for neural network. Choosing the
 
 - ReLU: This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
 
+We used a sample of these activation functions to improve our baseline, and determined a series of activation functions the network had to go through that led to decent performing results after numerous trials and tests.
 
-
-< Explanation of additional layers to the dqn to be included here >
 
 #### Rainbow DQN
 
@@ -135,55 +134,22 @@ We evaluate our agent on its performance while performing the mission. We origin
 
 <div style="text-align:left"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
-| Episode Range   	| Average return   	| Success rate (%) 	|
-|-	|-	|-	|
-| 0-500 	| 36.1 	| 4.2 	|
-| 500-1000 	| 39.6 	| 6.6 	|
-| 1000-1500 	| 40.9 	| 7.4 	|
-| ... 	| ... 	| ... 	|
-| 5000-5500 	| 48.9 	| 9.9 	|
-| 5500-6000 	| 50.6 	| 10.6 	|
-| ... 	| ... 	| ... 	|
-| 13000-13700 	| 56.8 	| 12.8 	|
-| 13500-13900 	| 54.1 	| 12.1 	|
+<div style="text-align:left"><img src="success_dqn1.png" width="450" height="290"/></div>
+
+<div style="text-align:left"><img src="success_dqn2.png" width="450" height="290"/></div>
 
 ### Rainbow DQN
 
 <div style="text-align:left"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
 
-| Episode Range    	| Average return    	| Success rate (%)    	|
-|-	|-	|-	|
-| 0-200 	| 40.9 	| 10.4 	|
-| 200-400 	| 44.9 	| 12 	|
-| 400-600 	| 52.6 	| 17.5 	|
-| 600-800 	| 67.2 	| 29 	|
-| 800-1000 	| 77.1 	| 34.5 	|
-| 1000-1200 	| 81.5 	| 39 	|
-| ... 	| ... 	| ... 	|
-| 3200-3400 	| 102.2 	| 54.5 	|
-| 3400-3600 	| 99.8 	| 52.5 	|
-| 3600-3800 	| 97.2 	| 49.5 	|
-| 3800-4000 	| 92.9 	| 47.5 	|
-| 4000-4200 	| 99.6 	| 52 	|
+<div style="text-align:left"><img src="success_rainbow.png" width="450" height="290"/></div>
+
 
 ### PPO
 
 <div style="text-align:left"><img src="returns_pponew.png" width="450" height="290"/></div>
 
-| Episode Range   	| Average return   	| Success rate (%) 	|
-|-	|-	|-	|
-| 0-500 	| 28.0 	| 1.9 	|
-| 500-1000 	| 35.5 	| 2.8 	|
-| 1000-1500 	| 46.1 	| 6.6 	|
-| 1500-2000 	| 48.9 	| 9.6 	|
-| ... 	| ... 	| ... 	|
-| 5000-5500 	| 62.1 	| 16.3 	|
-| 5500-6000 	| 52.8 	| 14.9 	|
-| ... 	| ... 	| ... 	|
-| 6500-7000 	| 61.9 	| 21.16 	|
-| 7000-7250 	| 60.9 	| 18 	|
-| 7250-7500 	| 62.4 	| 20.3 	|
-| 7500-7800 	| 69.5 	| 26.19 	|
+<div style="text-align:left"><img src="success_ppo.png" width="450" height="290"/></div>
 
 
 ## References
