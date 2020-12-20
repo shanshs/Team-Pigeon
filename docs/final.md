@@ -147,10 +147,8 @@ By modifying our implementation of the episilon greedy policy to fix a previous 
 
 <div style="text-align:center"><img src="newsuccess_dqn2.PNG"/></div>
 
-<table><tr>
-<td> <iframe width="560" height="315" src="https://www.youtube.com/embed/lxaZckCPLyw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<td> <iframe width="560" height="315" src="https://www.youtube.com/embed/REN80xghC7E" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</tr></table>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lxaZckCPLyw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/REN80xghC7E" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### PPO
 
@@ -160,6 +158,9 @@ Based on the below data, PPO performed reasonably well compared to the others wi
 <td> <img src="returns_pponew.png" alt="img1" style="width: 500px;"/> </td>
 <td> <img src="newsuccess_ppo.PNG" alt="img2" style="width: 350px;"/> </td>
 </tr></table>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uf1jwA0P1lo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xevYwAN4mTs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Rainbow DQN
 
@@ -171,6 +172,9 @@ Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm 
 </tr></table>
 
 While we were expecting a possibly higher success rate for the agent for our project, an approximate estimate of 50% success is quite good. We noticed that increasing the rate of obstacles in the tunnel did in fact lower the average returns and rewards for the agent, since sometimes the agent would be put into difficult situations. For example, if the agent was placed on the bottom left corner of the tunnel and was forced to move to the top right corner, the agent would not have enough time to "see" the difficult obstacle and move over to the corner in time. We found the environment challenging enough for both humans and the agent.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fFht8oVN7VU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/91WM3-ioZFI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 **Qualitative**
