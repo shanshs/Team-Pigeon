@@ -17,24 +17,6 @@ This problem isn’t trivial because the solution can be quite complex. There ar
 To find the most proper way to solve the problems above, our team had to experiment manipulating our environment and trying out several different reinforcement learning algorithms.
 
 ## Approaches
-### Activation Function
-The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
-
-#### Sigmoid(): 
-Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
-<div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div>
-￼
-#### Tanh(): 
-Zero centered, which makes negative, neutral, and strongly positive values easy to distinguish by the model. 
-<div style="text-align:left"><img src="Tanh.png" width="300" height="200"/></div>
-￼
-#### ReLU(): 
-This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
-<div style="text-align:left"><img src="relu.png" width="300" height="200"/></div>
-￼
-
-￼
-
 
 Our agent's actions are being rewarded with the following:
 **Reward Function**
@@ -99,6 +81,24 @@ $$
 $$
  
 We created an list called action_prob to save the probabilities for each action. Then, we calculate action_prob based on the formula above and randomly choose an action based on the probabilities in action_prob list.
+
+To improve on our baseline DQN algorithm we fixed our implementation of the episilon greedy policy and passed the Q network through a series of layers and activation layers.
+
+#### Activation Function
+The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
+
+<div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div> <div style="text-align:center"><img src="Tanh.png" width="300" height="200"/></div> <div style="text-align:right"><img src="relu.png" width="300" height="200"/></div> 
+
+##### Sigmoid(): 
+Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
+
+##### Tanh(): 
+Zero centered, which makes negative, neutral, and strongly positive values easy to distinguish by the model. 
+
+##### ReLU(): 
+This function allows the network to converge very fast. However, the gradient of the function becomes zero when inputs are close to zero, or are negative and the network cannot learn.
+
+
 
 < Explanation of additional layers to the dqn to be included here >
 
