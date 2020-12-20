@@ -146,19 +146,7 @@ Based on the below data, it is seen that our original implementation of DQN was 
 
 By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications. Our original DQN used simply one RELU activation layer for its Q network.
 
-<div style="text-align:center"><img src="success_dqn2.PNG	"/></div>
-
-| Episode Range   | Success Rate (%) |
-|-----------------|------------------|
-| 0-500           | 14.6             |
-| 500-1000        | 22.6             |
-| 1000-1500       | 19.8             |
-| 1500-2000       | 30.2             |
-| 2000-2500       | 33.2             |
-| 3000-3500       | 35.6             |
-| 3500-4000       | 34.8             |
-| 4000-4500       | 32.6             |
-| 4500-5000       | 29.2             |
+<div style="text-align:center"><img src="newsuccess_dqn2.PNG	"/></div>
 
 ### PPO
 
