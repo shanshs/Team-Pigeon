@@ -87,6 +87,14 @@ To improve on our baseline DQN algorithm we fixed our implementation of the epis
 ##### Activation Function
 The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
 
+
+<table><tr>
+<td> <img src="sigmoid.png" alt="img1" style="width: 300px; "/> </td>
+<td> <img src="Tanh.png" alt="img2" style="width: 300px;"/> </td>
+<td> <img src="relu.png" alt="img2" style="width: 300px;"/> </td>
+</tr></table>
+
+
 <div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div> <div style="text-align:center"><img src="Tanh.png" width="300" height="200"/></div> <div style="text-align:right"><img src="relu.png" width="300" height="200"/></div> 
 
 - Sigmoid: Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
@@ -122,6 +130,8 @@ For each episode:
  
 ## Evaluation
 
+**Quantitative**
+
 We evaluate our agent on its performance while performing the mission. We originally evaluated our agent solely on its performance on its steps vs return graph but found it to not be incredibly useful. By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters. Though we realized it was not incredibly clear to the viewer of the performance of the agent. We added an extra table to our evaluation set that includes a sample of data between a range of episodes the agent performs in. Each sample of data contains the average return and success rate for that range of episodes. We expected the agent to receive consistently high scores and to learn how to receive the maximum possible rewards, and learn to successfully complete the mission. Over time, we noticed that with our range of reinforcement learning algorithms, our agent improves and on average receives higher results. 
 
 
@@ -133,7 +143,7 @@ Based on the below data, it is seen that our original implementation of DQN was 
 
 <table><tr>
 <td> <img src="returns_torch_dqn.png" alt="img1" style="width: 500px;"/> </td>
-<td> <img src="success_dqn1.png" alt="img2" style="width: 270px;"/> </td>
+<td> <img src="success_dqn1.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
 
 By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications.
@@ -159,7 +169,9 @@ Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm 
 <td> <img src="success_dqnRainbow.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
 
+**Qualitative**
 
+It can be seen that the agent begins taking random moves with a high probability of failing the mission. Over time, gradually the agent learns to dodge the obstacles and succesfully finish the mission.
 ## References
 CS175 Assignment 2's DQN algorithm's episilon greedy policy
 
