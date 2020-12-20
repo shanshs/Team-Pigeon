@@ -117,9 +117,21 @@ For each episode:
 
 <div style="text-align:center"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
-<div style="text-align:center"><img src="returns-dqn-rainbow" width="450" height="290"/></div>
+| Episode Range   	| Average return   	| Success rate (%) 	|
+|-	|-	|-	|
+| 0-500 	| 36.1 	| 4.2 	|
+| 500-1000 	|  	| 6.6 	|
+| 1000-1500 	|  	| 7.4 	|
+| ... 	| ... 	| ... 	|
+| 5000-5500 	|  	| 9.9 	|
+| 5500-6000 	|  	| 10.6 	|
+| ... 	| ... 	| ... 	|
+| 13000-13700 	|  	| 12.8 	|
+| 13500-13900 	|  	| 12.1 	|
 
-| Episode Range 	| Average return 	| Success rate (%) 	|
+<div style="text-align:center"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
+
+| Episode Range    	| Average return    	| Success rate (%)    	|
 |-	|-	|-	|
 | 0-200 	| 40.989 	| 10.44 	|
 | 200-400 	| 44.895 	| 12 	|
@@ -134,10 +146,22 @@ For each episode:
 | 3800-4000 	| 92.955 	| 47.5 	|
 | 4000-4200 	| 99.582 	| 52 	|
 
-
-
 <div style="text-align:center"><img src="returns_pponew.png" width="450" height="290"/></div>
 
+| Episode Range   	| Average return   	| Success rate (%) 	|
+|-	|-	|-	|
+| 0-500 	| 28.046 	| 1.9 	|
+| 500-1000 	| 35.457 	| 2.8 	|
+| 1000-1500 	| 46.074 	| 6.6 	|
+| 1500-2000 	| 48.892 	| 9.6 	|
+| ... 	| ... 	| ... 	|
+| 5000-5500 	| 62.072 	| 16.3 	|
+| 5500-6000 	| 52.768 	| 14.9 	|
+| ... 	| ... 	| ... 	|
+| 6500-7000 	| 61.916 	| 21.16 	|
+| 7000-7250 	| 60.872 	| 18 	|
+| 7250-7500 	| 62.378 	| 20.3 	|
+| 7500-7800 	| 69.492 	| 26.19 	|
 
 
 ## References
