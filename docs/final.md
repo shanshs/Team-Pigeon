@@ -89,9 +89,8 @@ For each episode:
 	For each agent:
 		Run stotastic grading policy in environment for set number of time
 		Compute advantage estimates at each timestamp
-	Optimize surrogate loss function with respect to stotastic grading policy, with K epochs and a minibatch size less than or equal to the number of agents * timesteps
+	Optimize surrogate loss function with respect to old policy parameters, with K epochs and a minibatch size ≤ to the number of agents * timesteps
 	Replace the old vector of policy parameters with the newly formed one
-
 ```
 
 Lastly, we experimented with one last approach: Rainbow DQN, a combination of several improvements DQN algorithms.
@@ -107,14 +106,15 @@ Lastly, we experimented with one last approach: Rainbow DQN, a combination of se
 | Paragraph   | Text        |
 
 ## References
-CS175 Assignment 2's DQN algorithm
+CS175 Assignment 2's DQN algorithm's episilon greedy policy
 
 https://github.com/microsoft/malmo
 
-http://microsoft.github.io/malmo/0.30.0/Documentation/
+Malmo - http://microsoft.github.io/malmo/0.30.0/Documentation/
 
-https://docs.ray.io/
+RLlib - https://docs.ray.io/
 
-https://arxiv.org/pdf/1710.02298.pdf
+Rainbow DQN - https://arxiv.org/pdf/1710.02298.pdf
 
+PPO - https://arxiv.org/pdf/1707.06347.pdf
 PyTorch and TensorFlow library
