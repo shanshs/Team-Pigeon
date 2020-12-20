@@ -84,7 +84,7 @@ We created an list called action_prob to save the probabilities for each action.
 
 To improve on our baseline DQN algorithm we fixed our implementation of the episilon greedy policy and passed the Q network through a series of layers and activation layers.
 
-##### Activation Function
+#### Activation Function
 The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
 
 
@@ -93,9 +93,6 @@ The activation function is an essential element for neural network. Choosing the
 <td> <img src="Tanh.png" alt="img2" style="width: 300px;"/> </td>
 <td> <img src="relu.png" alt="img2" style="width: 300px;"/> </td>
 </tr></table>
-
-
-<div style="text-align:left"><img src="sigmoid.png" width="300" height="200"/></div> <div style="text-align:center"><img src="Tanh.png" width="300" height="200"/></div> <div style="text-align:right"><img src="relu.png" width="300" height="200"/></div> 
 
 - Sigmoid: Output values is between range 0-1, which can produce very clear prediction. For very high or low values of x, this function almost doesn't affect the prediction, which may result in the network refusing to learn.
 
@@ -106,7 +103,7 @@ The activation function is an essential element for neural network. Choosing the
 We used a sample of these activation functions to improve our baseline, and determined a series of activation functions the network had to go through that led to decent performing results after numerous trials and tests.
 
 
-#### Rainbow DQN
+### Rainbow DQN
 
 We also experimented with one approach as an extension to DQN: Rainbow DQN, a combination of several improvements DQN algorithms. RLlib provided us with an implementation of a standard DQN algorithm, and with a few given modifications we were able to easily transform it to Rainbow DQN.
 
