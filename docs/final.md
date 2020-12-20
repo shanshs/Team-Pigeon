@@ -167,9 +167,13 @@ Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm 
 <td> <img src="success_dqnRainbow.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
 
+While we were expecting a possibly higher success rate for the agent for our project, an approximate estimate of 50% success is quite good. We noticed that increasing the rate of obstacles in the tunnel did in fact lower the average returns and rewards for the agent, since sometimes the agent would be put into difficult situations. For example, if the agent was placed on the bottom left corner of the tunnel and was forced to move to the top right corner, the agent would not have enough time to "see" the difficult obstacle and move over to the corner in time. We found the environment challenging enough for both humans and the agent.
+
+
 **Qualitative**
 
-It can be seen that the agent begins taking random moves with a high probability of failing the mission. Over time, gradually the agent learns to dodge the obstacles and succesfully finish the mission.
+It can be seen that the agent begins taking random moves with a high probability of failing the mission. Over time, gradually the agent learns to dodge the obstacles and succesfully finish the mission. The clips of the agent's performance for each algorithm in our video demonstrates this. In the beginning of training, the agent makes random movements and rarely completes the mission. Eventually, over the course of several thousand period of episodes the agent slowly improves and recognizes the different obstacles and shapes the obstacles occur in and learns which direction to move in order to dodge them. 
+
 ## References
 CS175 Assignment 2's DQN algorithm's episilon greedy policy
 
