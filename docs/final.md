@@ -134,22 +134,22 @@ We evaluate our agent on its performance while performing the mission. We origin
 
 <div style="text-align:left"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
-<div style="text-align:left"><img src="success_dqn1.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="success_dqn1.png"/></div>
 
-<div style="text-align:left"><img src="success_dqn2.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="success_dqn2.png"/></div>
 
 ### Rainbow DQN
 
 <div style="text-align:left"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
 
-<div style="text-align:left"><img src="success_rainbow.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="success_rainbow.png"/></div>
 
 
 ### PPO
 
 <div style="text-align:left"><img src="returns_pponew.png" width="450" height="290"/></div>
 
-<div style="text-align:left"><img src="success_ppo.png" width="450" height="290"/></div>
+<div style="text-align:left"><img src="success_ppo.png"/></div>
 
 
 ## References
