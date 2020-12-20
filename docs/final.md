@@ -7,31 +7,30 @@ title: Final Report
 <iframe width="560" height="315" src="https://www.youtube.com/embed/jl5mUrEhiiw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Project Summary
-Our project attempts to have an agent complete a “Dropper” map, which is a map in which a player attempts to fall safely to the bottom while avoiding obstacles. Our agent will be completing a map in which there is a 5 block wide and 250 blocks high tunnel. Inside the tunnel, there are some **randomly generated** obsidian obstacles at different locations (By randomly generating the map, the agent sometimes meets a more complex situation: for example, it can go left to avoid hitting an obstacle, but that would cause a dead-end or narrow escape further down). At the bottom of the tunnel, there is a pool of water.
+Our project attempts to have an agent complete a “Dropper” map, which is a map in which a player attempts to fall safely to the bottom while avoiding obstacles. Our agent will be completing a map in which there is a 5 block wide and 250 block high tunnel. Inside the tunnel, there are some **randomly generated** obsidian obstacles at different locations (By randomly generating the map, the agent sometimes meets a more complex situation: for example, it can go left to avoid hitting an obstacle, but that would cause a dead-end or narrow escape further down). At the bottom of the tunnel, there is a pool of water.
 
-The agent will spawn at the top of the tunnel and begin falling from it. The goal of the mission is to let the agent reach the bottom of the tunnel and land in the pool of water safely without taking any damage. In this process, the agent will strafe in the air by moving in different directions to avoid all obsidian obstacles inside the tunnel to avoid dying from fall damage and make its way to the bottom.
+The agent will spawn at the top of the tunnel and begin falling from it. The goal of the mission is for the agent reach the bottom of the tunnel and land in the pool of water safely without taking any damage. In this process, the agent will strafe in the air by moving in different directions to avoid all obsidian obstacles inside the tunnel to avoid dying from fall damage and make its way to the bottom.
 
 <div style="text-align:center"><img src="summary3.png" width="500" height="330"/></div>
 
-This problem isn’t trivial because the solution can be quite complex. There are a lot of ways to reward and punish the agent and finding the best way takes a lot of time. The falling speed of the agent raises another challenge and it is the biggest challenge of this project since we are not able to control the falling speed of the agent, so we can only adjust the value of other parameters to adapt it. Our team has to find the most suitable obstacle density and optimal timing for the agent to perform actions while falling. If the time between actions is too long, the agent makes less move so it will dodge less obstacles, lowering the probability of success. If the time is too short, the rewards do not get registered correctly by Malmo. Also, if the gap between two obstacles is too short, the agent would not have enough time to make a move. The goal for the map and obstacle creation was to make the obstacles and map for the environment realistic and playable enough that even humans could have a decent chance of completing maps. 
+This problem isn’t trivial because the solution can be quite complex. There are a lot of ways to reward and punish the agent and finding the best way takes a lot of time. The falling speed of the agent raises another challenge and it is the biggest challenge of this project. Since we are not able to control the falling speed of the agent, we can only adjust the value of other parameters to adapt to it. Our team has to find the most suitable obstacle density and optimal timing for the agent to perform actions while falling. If the time between actions is too long, the agent makes less move so it will dodge less obstacles, lowering the probability of success. If the time is too short, the rewards do not get registered correctly by Malmo. Also, if the gap between two obstacles is too short, the agent would not have enough time to make a move. The goal for the map and obstacle creation was to make the obstacles and map realistic and playable enough that even humans could have a decent chance of completing maps. 
 
-To find the most proper way to solve the problems above, our team had to experiment manipulating our environment and trying out several different reinforcement learning algorithms.
+To find the best way to solve the problems above, our team experimented with manipulating our environment and trying out several different reinforcement learning algorithms.
 
 ## Approaches
 
-Our agent's actions are being rewarded with the following:
+Our agent's actions are rewarded with the following:
 **Reward Function**
 $$
 R(s)=\left\{
 	\begin{aligned}
 	100 &\ (\text{Agent reaches water safely})\\
 	1 &\ (\text{+1 For every millisecond the agent is alive})\\
-	-25 &\ (\text{Hitting an obstacle})\\
 	\end{aligned}
 	\right.
 $$
 
-The agent is greatly rewarded with 100 points for completeing the objective and reaching the water safely and is punished for being damaged obstacles without fully dying receiving -25 points. However, we wanted to ensure that the agent wouldn't spend time randomly moving until it luckily lands in the water or hits an obstacle so we added another reward for staying alive as long as possible in order to encourage the agent to dodge obstacles and get lower in the tunnel. Thus we gave the agent 1 point for every millisecond of in-game time it remained alive.
+The agent is greatly rewarded with 100 points for completeing the objective and reaching the water safely. However, we wanted to ensure that the agent wouldn't spend time randomly moving until it luckily lands in the water or hits an obstacle. Thus we added another reward for staying alive as long as possible in order to encourage the agent to dodge obstacles and get lower in the tunnel. We decided to have the agent receive 1 point for every millisecond of in-game time it remained alive.
 
 To keep simplicity, our agent always faces the north and only takes discrete actions consisting of:
 
@@ -43,7 +42,7 @@ To keep simplicity, our agent always faces the north and only takes discrete act
 
 
 ### DQN
-We are primarily using Reinforcement Learning for our approach for the project, using the below DQN algorithm.
+We are primarily using Reinforcement Learning for our approach in the project, using the below DQN algorithm.
 
 $$
 Q(S_t, A_t)\leftarrow Q(S_t, A_t) + \alpha[R_{t+1} + \gamma\max_a Q(S_{t+1},a)- Q(s_t, A_t)]
@@ -81,12 +80,12 @@ $$
 	\right.
 $$
  
-We created an list called action_prob to save the probabilities for each action. Then, we calculate action_prob based on the formula above and randomly choose an action based on the probabilities in action_prob list.
+We created a list called action_prob to save the probabilities for each action. Then, we calculate action_prob based on the formula above and randomly choose an action based on the probabilities in action_prob list.
 
 To improve on our baseline DQN algorithm we fixed our implementation of the episilon greedy policy and passed the Q network through a series of layers and activation layers.
 
 #### Activation Function
-The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and have a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
+The activation function is an essential element for neural network. Choosing the right activation function for a layer is important and has a significant impact on the the training process. In the project, we have tried out different activation functions to experiement which of these give us the best result. The three activation functions shown below are used in the project:
 
 
 <table><tr>
@@ -106,7 +105,7 @@ We used a sample of these activation functions to improve our baseline, and dete
 
 ### Rainbow DQN
 
-We also experimented with one approach as an extension to DQN: Rainbow DQN, a combination of several improvements DQN algorithms. RLlib provided us with an implementation of a standard DQN algorithm, and with a few given modifications we were able to easily transform it to Rainbow DQN.
+We also experimented with one approach as an extension to DQN: Rainbow DQN, a combination of several improvements to DQN algorithms. RLlib provided us with an implementation of a standard DQN algorithm, and with a few given modifications we were able to easily transform it to Rainbow DQN.
 
 Essentially, Rainbow DQN is a dubbed term of a combination of extensions of DQN. These include the following: Double Q-learning, prioritized replay, dueling networks, multi-step learning, distributional reinforcement learning, and noisy neural network stream. A more in-depth explanation of these terms are included in the research paper in our [source](https://arxiv.org/pdf/1710.02298.pdf) .
 
@@ -130,7 +129,7 @@ For each episode:
 
 **Quantitative**
 
-We evaluate our agent on its performance while performing the mission. We originally evaluated our agent solely on its performance on its steps vs return graph but found it to not be incredibly useful. By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters. Though we realized it was not incredibly clear to the viewer of the performance of the agent. We added an extra table to our evaluation set that includes a sample of data between a range of episodes the agent performs in. Each sample of data contains the average return and success rate for that range of episodes. We expected the agent to receive consistently high scores and to learn how to receive the maximum possible rewards, and learn to successfully complete the mission. Over time, we noticed that with our range of reinforcement learning algorithms, our agent improves and on average receives higher results. 
+We evaluate our agent on its performance while performing the mission. We originally evaluated our agent solely on its performance on its steps vs return graph but found it to not be incredibly useful. By using graphs of the return values we can see how effectively our agent is learning with our current reward parameters. Though we realized it was not incredibly clear to the viewer of the performance of the agent due to the large amount of noise. We added an extra table to our evaluation set that includes a sample of data between a range of episodes the agent performs in. Each sample of data contains the average return and success rate of reaching the water for that range of episodes. We expected the agent to receive consistently high scores and to learn how to receive the maximum possible rewards, and learn to successfully complete the mission. Over time, we noticed that with our range of reinforcement learning algorithms, our agent improves and on average receives higher results. 
 
 
 
@@ -159,7 +158,7 @@ Based on the below data, PPO performed reasonably well compared to the others wi
 
 ### Rainbow DQN
 
-Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm with additional hyperparameters performed the best out of the three algorithms we tested. This was surprising, because after researching the Rainbow DQN algorithm and seeing the results in the paper about it, we did not expect the algorithm to work as well as it did on our project too. Compared to the bare DQN and PPO algorithms above, it is clear that the agent ends up receiving on average, much higher returns. The graph is much less densely populated with low average returns compared to the other two algorithms. The Rainbow DQN's average return and success rates are also about double, if not more, than the base DQN algorithm.  
+Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm with additional hyperparameters performed the best out of the three algorithms we tested. This was surprising, because after researching the Rainbow DQN algorithm and seeing the results in the paper about it, we did not expect the algorithm to work as well as it did in our project too. Compared to the bare DQN and PPO algorithms above, it is clear that the agent ends up receiving on average, much higher returns. The graph is much less densely populated with low average returns compared to the other two algorithms. The Rainbow DQN's average return and success rates are also about double, if not more, than the base DQN algorithm.  
 
 <table><tr>
 <td> <img src="returns-dqn-rainbow.png" alt="img1" style="width: 500px;"/> </td>
@@ -171,7 +170,7 @@ While we were expecting a possibly higher success rate for the agent for our pro
 
 **Qualitative**
 
-It can be seen that the agent begins taking random moves with a high probability of failing the mission. Over time, gradually the agent learns to dodge the obstacles and succesfully finish the mission. The clips of the agent's performance for each algorithm in our video demonstrates this. In the beginning of training, the agent makes random movements and rarely completes the mission. Eventually, over the course of several thousand period of episodes the agent slowly improves and recognizes the different obstacles and shapes the obstacles occur in and learns which direction to move in order to dodge them. 
+It can be seen that the agent begins taking random moves with a high probability of failing the mission. Over time, gradually the agent learns to dodge the obstacles and succesfully finish the mission. The clips of the agent's performance in our video demonstrate this. In the beginning of training, the agent makes random movements and rarely completes the mission. Eventually, over the course of several thousand period of episodes the agent slowly improves and recognizes the different obstacles and shapes the obstacles occur in and learns which direction to move in order to dodge them. 
 
 ## References
 CS175 Assignment 2's DQN algorithm's episilon greedy policy
