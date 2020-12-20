@@ -59,7 +59,7 @@ For each episode:
    While the agent hasn't reached the pool of water or dies:
       Choose an action by applying epsilon greedy policy from Q network
       Take the action
-      Get the next observation by check the 3*3*10 grid around the agent
+      Get the next observation by check the 3*30*3 grid around the agent
       Calculate the reward
       Update Q network
 ```
@@ -82,12 +82,21 @@ We created an list called action_prob to save the probabilities for each action.
 
 We also experimented another reinforcement learning algorithm called Proximal Policy Optimization (PPO) using the Ray RLlib library. PPO explores by sampling actions according to its latest version of its stochastic policy. This randomness depends on the initial conditions of the environment. The stochastic policy eventually becomes less random and encourages the agent to utilize paths to rewards it has found already.
 
-< Insert ppo stuff here > 
 
+```
+https://arxiv.org/pdf/1707.06347.pdf
+For each episode:
+	For each agent:
+		Run stotastic grading policy in environment for set number of time
+		Compute advantage estimates at each timestamp
+	Optimize surrogate loss function with respect to stotastic grading policy, with K epochs and a minibatch size less than or equal to the number of agents * timesteps
+	Replace the old vector of policy parameters with the newly formed one
+
+```
 
 Lastly, we experimented with one last approach: Rainbow DQN, a combination of several improvements DQN algorithms.
 
-<Insert rainbow stuff here >
+
 
  
 ## Evaluation
