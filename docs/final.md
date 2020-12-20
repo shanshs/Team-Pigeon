@@ -143,12 +143,12 @@ Based on the below data, it is seen that our original implementation of DQN was 
 
 <div style="text-align:left"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
-<div style="text-align:left"><img src="success_dqn1.png"/></div>
+<div style="text-align:left"><img src="success_dqn1.PNG"/></div>
 
 
 By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications.
 
-<div style="text-align:left"><img src="success_dqn2.png"/></div>
+<div style="text-align:left"><img src="success_dqn2.PNG"/></div>
 
 
 ### PPO
@@ -157,7 +157,7 @@ Based on the below data, PPO performed reasonably well compared to the others wi
 
 <table><tr>
 <td> <img src="returns_pponew.png" alt="img1" style="width: 300px;"/> </td>
-<td> <img src="success_ppo.png" alt="img2" style="width: 270px;"/> </td>
+<td> <img src="success_ppo.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
 
 <div style="text-align:left"><img src="returns_pponew.png" width="450" height="290"/></div>
@@ -170,7 +170,7 @@ Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm 
 
 <table><tr>
 <td> <img src="returns-dqn-rainbow.png" alt="img1" style="width: 300px;"/> </td>
-<td> <img src="success_dqnRainbow.png" alt="img2" style="width: 270px;"/> </td>
+<td> <img src="success_dqnRainbow.PNG" alt="img2" style="width: 270px;"/> </td>
 </tr></table>
 
 <div style="text-align:left"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
