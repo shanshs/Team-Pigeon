@@ -132,24 +132,50 @@ We evaluate our agent on its performance while performing the mission. We origin
 
 ### DQN
 
+Based on the below data, it is seen that our original implementation of DQN was not very successful. The agent appears to slowly learn to navigate against obstacles and sometimes reach the bottom, but the agent seems to still make some random movements most of the time. While it may have improved slightly, its low success rate was not what our group was looking for. 
+
+
+<table><tr>
+<td> <img src="returns_torch_dqn.png" alt="img1" style="width: 300px;"/> </td>
+<td> <img src="success_dqn1.png" alt="img2" style="width: 270px;"/> </td>
+</tr></table>
+
+
 <div style="text-align:left"><img src="returns_torch_dqn.png" width="450" height="290"/></div>
 
 <div style="text-align:left"><img src="success_dqn1.png"/></div>
 
+
+By modifying our implementation of the episilon greedy policy to fix a previous issue with it, and adding additional layers for the neural network to pass through, we received the following results for success. This was to be expected, since as a base, DQN does not perform very well without any modifications.
+
 <div style="text-align:left"><img src="success_dqn2.png"/></div>
-
-### Rainbow DQN
-
-<div style="text-align:left"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
-
-<div style="text-align:left"><img src="success_rainbow.png"/></div>
 
 
 ### PPO
 
+Based on the below data, PPO performed reasonably well compared to the others with an approximate success rate at about 20 to 25%. 
+
+<table><tr>
+<td> <img src="returns_pponew.png" alt="img1" style="width: 300px;"/> </td>
+<td> <img src="success_ppo.png" alt="img2" style="width: 270px;"/> </td>
+</tr></table>
+
 <div style="text-align:left"><img src="returns_pponew.png" width="450" height="290"/></div>
 
 <div style="text-align:left"><img src="success_ppo.png"/></div>
+
+### Rainbow DQN
+
+Based on the below data, the Rainbow DQN algorithm, using RLlib's DQN algorithm with additional hyperparameters performed the best out of the three algorithms we tested. 
+
+<table><tr>
+<td> <img src="returns-dqn-rainbow.png" alt="img1" style="width: 300px;"/> </td>
+<td> <img src="success_dqnRainbow.png" alt="img2" style="width: 270px;"/> </td>
+</tr></table>
+
+<div style="text-align:left"><img src="returns-dqn-rainbow.png" width="450" height="290"/></div>
+
+<div style="text-align:left"><img src="success_rainbow.png"/></div>
 
 
 ## References
